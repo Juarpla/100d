@@ -65,30 +65,36 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-red-100 dark:from-pink-900 dark:via-purple-900 dark:to-red-900">
       <main className="flex min-h-screen flex-col items-center justify-center px-4 py-8">
-        {/* Hearts decoration */}
-        <div className="absolute top-8 left-8 text-6xl animate-pulse">💕</div>
-        <div className="absolute top-12 right-12 text-5xl animate-pulse delay-300">❤️</div>
-        <div className="absolute bottom-12 left-16 text-5xl animate-pulse delay-500">💖</div>
-        <div className="absolute bottom-16 right-20 text-6xl animate-pulse delay-700">💝</div>
+        {/* Dancing Fruits in Love */}
+        <div className="absolute top-8 left-8 text-7xl md:text-8xl animate-dance-left">🍍</div>
+        <div className="absolute top-12 right-12 text-7xl md:text-8xl animate-dance-right">🍓</div>
+        <div className="absolute bottom-12 left-16 text-7xl md:text-8xl animate-dance-right">🍓</div>
+        <div className="absolute bottom-16 right-20 text-7xl md:text-8xl animate-dance-left">🍍</div>
+
+        {/* Hearts floating between them */}
+        <div className="absolute top-20 left-32 text-4xl animate-pulse">💕</div>
+        <div className="absolute top-24 right-32 text-3xl animate-pulse delay-300">💖</div>
+        <div className="absolute bottom-24 left-32 text-3xl animate-pulse delay-500">💗</div>
+        <div className="absolute bottom-28 right-36 text-4xl animate-pulse delay-700">💝</div>
 
         {/* Main content container */}
         <div className="max-w-4xl w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12">
 
           {/* Title Section */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-pink-500 via-red-500 to-purple-600 bg-clip-text text-transparent mb-4">
+          <div className="text-center mb-4 sm:mb-6 md:mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-pink-500 via-red-500 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-4 px-2">
               Juan & Walewska
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-semibold">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-semibold px-2">
               🎉 Almost 100 Days Together! 🎉
             </p>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 px-2">
               3 Beautiful Months of Love
             </p>
           </div>
 
           {/* Photo Gallery Carousel */}
-          <div className="mb-8 relative overflow-hidden rounded-2xl shadow-lg" style={{ height: '400px' }}>
+          <div className="mb-4 sm:mb-6 md:mb-8 relative overflow-hidden rounded-xl sm:rounded-2xl shadow-lg h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]">
             {images.map((img, index) => (
               <div
                 key={img}
@@ -106,13 +112,13 @@ export default function Home() {
               </div>
             ))}
             {/* Image counter dots */}
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+            <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5 sm:gap-2">
               {images.map((_, index) => (
                 <div
                   key={index}
-                  className={`w-2 h-2 rounded-full transition-all ${
+                  className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all ${
                     index === currentImageIndex 
-                      ? 'bg-white w-8' 
+                      ? 'bg-white w-6 sm:w-8' 
                       : 'bg-white/50'
                   }`}
                 />
@@ -123,61 +129,61 @@ export default function Home() {
           {/* Countdown Section */}
           {!timeLeft.isComplete ? (
             <div className="text-center">
-              <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
                 Countdown to November 23rd
               </h2>
-              <div className="grid grid-cols-4 gap-4 mb-6">
-                <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-xl p-4 shadow-lg">
-                  <div className="text-3xl md:text-5xl font-bold text-white">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+                <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                  <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
                     {timeLeft.days}
                   </div>
-                  <div className="text-sm md:text-base text-white/90 font-medium">
+                  <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
                     Days
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-xl p-4 shadow-lg">
-                  <div className="text-3xl md:text-5xl font-bold text-white">
+                <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                  <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
                     {timeLeft.hours}
                   </div>
-                  <div className="text-sm md:text-base text-white/90 font-medium">
+                  <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
                     Hours
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-red-400 to-purple-400 rounded-xl p-4 shadow-lg">
-                  <div className="text-3xl md:text-5xl font-bold text-white">
+                <div className="bg-gradient-to-br from-red-400 to-purple-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                  <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
                     {timeLeft.minutes}
                   </div>
-                  <div className="text-sm md:text-base text-white/90 font-medium">
+                  <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
                     Minutes
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-pink-500 to-red-500 rounded-xl p-4 shadow-lg">
-                  <div className="text-3xl md:text-5xl font-bold text-white">
+                <div className="bg-gradient-to-br from-pink-500 to-red-500 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                  <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
                     {timeLeft.seconds}
                   </div>
-                  <div className="text-sm md:text-base text-white/90 font-medium">
+                  <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
                     Seconds
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="text-center py-12">
-              <h2 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text mb-4">
+            <div className="text-center py-6 sm:py-8 md:py-12 px-2">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text mb-3 sm:mb-4">
                 🎊 Congratulations! 🎊
               </h2>
-              <p className="text-2xl md:text-3xl text-gray-800 dark:text-white font-semibold mb-4">
+              <p className="text-xl sm:text-2xl md:text-3xl text-gray-800 dark:text-white font-semibold mb-3 sm:mb-4">
                 Happy 100 Days Together!
               </p>
-              <p className="text-xl text-gray-600 dark:text-gray-300">
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300">
                 Celebrating 3 amazing months of love and happiness! 💕
               </p>
             </div>
           )}
 
           {/* Love message */}
-          <div className="text-center mt-8 p-6 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/30 dark:to-purple-900/30 rounded-xl">
-            <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic">
+          <div className="text-center mt-4 sm:mt-6 md:mt-8 p-4 sm:p-5 md:p-6 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/30 dark:to-purple-900/30 rounded-lg sm:rounded-xl">
+            <p className="text-base sm:text-lg md:text-xl text-gray-700 dark:text-gray-300 italic leading-relaxed">
               &ldquo;Every moment with you is a treasure. Here are some of the first moments we spent together.&rdquo; 💑
             </p>
           </div>
