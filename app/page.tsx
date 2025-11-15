@@ -64,21 +64,21 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-red-100 dark:from-pink-900 dark:via-purple-900 dark:to-red-900">
-      <main className="flex min-h-screen flex-col items-center justify-center px-4 py-8">
-        {/* Dancing Fruits in Love */}
-        <div className="absolute top-8 left-8 text-7xl md:text-8xl animate-dance-left">🍍</div>
-        <div className="absolute top-12 right-12 text-7xl md:text-8xl animate-dance-right">🍓</div>
-        <div className="absolute bottom-12 left-16 text-7xl md:text-8xl animate-dance-right">🍓</div>
-        <div className="absolute bottom-16 right-20 text-7xl md:text-8xl animate-dance-left">🍍</div>
+      <main className="flex min-h-screen flex-col items-center justify-center px-2 sm:px-4 py-4 sm:py-8 relative">
+        {/* Dancing Fruits in Love - Visible and sized appropriately */}
+        <div className="absolute top-4 left-2 sm:top-8 sm:left-8 text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-dance-left z-10">🍍</div>
+        <div className="absolute top-4 right-2 sm:top-12 sm:right-12 text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-dance-right z-10">🍓</div>
+        <div className="absolute bottom-4 left-2 sm:bottom-12 sm:left-16 text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-dance-right z-10">🍓</div>
+        <div className="absolute bottom-4 right-2 sm:bottom-16 sm:right-20 text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-dance-left z-10">🍍</div>
 
-        {/* Hearts floating between them */}
-        <div className="absolute top-20 left-32 text-4xl animate-pulse">💕</div>
-        <div className="absolute top-24 right-32 text-3xl animate-pulse delay-300">💖</div>
-        <div className="absolute bottom-24 left-32 text-3xl animate-pulse delay-500">💗</div>
-        <div className="absolute bottom-28 right-36 text-4xl animate-pulse delay-700">💝</div>
+        {/* Hearts floating between them - Hidden on small screens */}
+        <div className="hidden md:block absolute top-20 left-28 lg:left-32 text-3xl lg:text-4xl animate-pulse z-10">💕</div>
+        <div className="hidden md:block absolute top-24 right-28 lg:right-32 text-2xl lg:text-3xl animate-pulse delay-300 z-10">💖</div>
+        <div className="hidden md:block absolute bottom-24 left-28 lg:left-32 text-2xl lg:text-3xl animate-pulse delay-500 z-10">💗</div>
+        <div className="hidden md:block absolute bottom-28 right-32 lg:right-36 text-3xl lg:text-4xl animate-pulse delay-700 z-10">💝</div>
 
         {/* Main content container */}
-        <div className="max-w-4xl w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12">
+        <div className="max-w-4xl w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 lg:p-12 relative z-20">
 
           {/* Title Section */}
           <div className="text-center mb-4 sm:mb-6 md:mb-8">
