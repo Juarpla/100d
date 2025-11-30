@@ -12,7 +12,25 @@ export default function Home() {
     isComplete: false
   });
 
+  const [timeLeft4Months, setTimeLeft4Months] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isComplete: false
+  });
+
+  const [timeLeftTrip, setTimeLeftTrip] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isComplete: false
+  });
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
+  const [isPhraseLoading, setIsPhraseLoading] = useState(true);
 
   const images = [
     "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
@@ -22,34 +40,37 @@ export default function Home() {
     "/love/WhatsApp Image 2025-11-14 at 17.45.19.jpeg"
   ];
 
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const targetDate = new Date('2025-11-23T00:00:00').getTime();
-      const now = new Date().getTime();
-      const difference = targetDate - now;
+  const calculateTimeLeft = (targetDate: string) => {
+    const target = new Date(targetDate).getTime();
+    const now = new Date().getTime();
+    const difference = target - now;
 
-      if (difference <= 0) {
-        setTimeLeft({
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-          isComplete: true
-        });
-        return;
-      }
+    if (difference <= 0) {
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        isComplete: true
+      };
+    }
 
-      setTimeLeft({
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((difference % (1000 * 60)) / 1000),
-        isComplete: false
-      });
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((difference % (1000 * 60)) / 1000),
+      isComplete: false
     };
+  };
 
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
+  useEffect(() => {
+    const targetDate = '2025-11-23T00:00:00';
+    setTimeLeft(calculateTimeLeft(targetDate));
+
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft(targetDate));
+    }, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -61,6 +82,48 @@ export default function Home() {
 
     return () => clearInterval(imageTimer);
   }, [images.length]);
+
+  useEffect(() => {
+    const update4Months = () => {
+      setTimeLeft4Months(calculateTimeLeft('2025-12-15T00:00:00'));
+    };
+
+    update4Months();
+    const timer = setInterval(update4Months, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const updateTrip = () => {
+      setTimeLeftTrip(calculateTimeLeft('2026-01-01T00:00:00'));
+    };
+
+    updateTrip();
+    const timer = setInterval(updateTrip, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const fetchLovePhrase = async () => {
+      try {
+        setIsPhraseLoading(true);
+        const response = await fetch('/api/phrase');
+        const data = await response.json();
+        if (data.phrase) {
+          setLovePhrase(data.phrase);
+        }
+      } catch (error) {
+        console.error('Error fetching love phrase:', error);
+        // Keep the default phrase on error
+      } finally {
+        setIsPhraseLoading(false);
+      }
+    };
+
+    fetchLovePhrase();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-red-100 dark:from-pink-900 dark:via-purple-900 dark:to-red-900">
@@ -86,10 +149,10 @@ export default function Home() {
               Juan & Walewska
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-semibold px-2">
-              🎉 Almost 100 Days Together! 🎉
+              🎉 Almost 4 Beautiful Months Together! 🎉
             </p>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 px-2">
-              3 Beautiful Months of Love
+              Close to do a new trip and celebrate new year! ❤️
             </p>
           </div>
 
@@ -127,7 +190,7 @@ export default function Home() {
           </div>
 
           {/* Countdown Section */}
-          {!timeLeft.isComplete ? (
+          {!timeLeft.isComplete && (
             <div className="text-center">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
                 Countdown to November 23rd
@@ -167,25 +230,115 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="text-center py-6 sm:py-8 md:py-12 px-2">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text mb-3 sm:mb-4">
-                🎊 Congratulations! 🎊
-              </h2>
-              <p className="text-xl sm:text-2xl md:text-3xl text-gray-800 dark:text-white font-semibold mb-3 sm:mb-4">
-                Happy 100 Days Together!
-              </p>
-              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300">
-                Celebrating 3 amazing months of love and happiness! 💕
-              </p>
-            </div>
           )}
+
+          {/* Separator */}
+          <div className="flex items-center justify-center my-6 sm:my-8 md:my-10">
+            <div className="flex-grow h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent dark:via-pink-700"></div>
+            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl">💝</div>
+            <div className="flex-grow h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent dark:via-pink-700"></div>
+          </div>
+
+          {/* Countdown to 4 Months */}
+          <div className="text-center mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
+              Countdown to December 15th - Celebrating 4 Months of Dating
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+              <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeft4Months.days}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Days
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeft4Months.hours}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Hours
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-red-400 to-purple-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeft4Months.minutes}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Minutes
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-pink-500 to-red-500 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeft4Months.seconds}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Seconds
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Separator */}
+          <div className="flex items-center justify-center my-6 sm:my-8 md:my-10">
+            <div className="flex-grow h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-700"></div>
+            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl">🌊</div>
+            <div className="flex-grow h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-700"></div>
+          </div>
+
+          {/* Countdown to Trip */}
+          <div className="text-center mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
+              Countdown to January 1st - Trip to Puerto Malabrigo
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+              <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftTrip.days}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Days
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftTrip.hours}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Hours
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-red-400 to-purple-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftTrip.minutes}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Minutes
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-pink-500 to-red-500 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftTrip.seconds}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Seconds
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Love message */}
           <div className="text-center mt-4 sm:mt-6 md:mt-8 p-4 sm:p-5 md:p-6 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/30 dark:to-purple-900/30 rounded-lg sm:rounded-xl">
-            <p className="text-base sm:text-lg md:text-xl text-gray-700 dark:text-gray-300 italic leading-relaxed">
-              &ldquo;Every moment with you is a treasure. Here are some of the first moments we spent together.&rdquo; 💑
-            </p>
+            {isPhraseLoading ? (
+              <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 italic leading-relaxed animate-pulse">
+                Loading inspiration...
+              </p>
+            ) : (
+              <p className="text-base sm:text-lg md:text-xl text-gray-700 dark:text-gray-300 italic leading-relaxed">
+                &ldquo;{lovePhrase}&rdquo; 💑
+              </p>
+            )}
           </div>
         </div>
       </main>
