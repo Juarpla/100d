@@ -28,16 +28,27 @@ export default function Home() {
     isComplete: false
   });
 
+  const [timeLeftGoal, setTimeLeftGoal] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isComplete: false
+  });
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
   const [isPhraseLoading, setIsPhraseLoading] = useState(true);
 
   const images = [
     "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
-    "/love/WhatsApp Image 2025-11-14 at 17.45.18.jpeg",
     "/love/WhatsApp Image 2025-11-14 at 17.45.19 (1).jpeg",
     "/love/WhatsApp Image 2025-11-14 at 17.45.19 (2).jpeg",
-    "/love/WhatsApp Image 2025-11-14 at 17.45.19.jpeg"
+    "/love/WhatsApp Image 2025-12-09 at 00.41.54.jpeg",
+    "/love/WhatsApp Image 2025-12-11 at 18.39.13.jpeg",
+    "/love/WhatsApp Image 2025-12-18 at 17.01.31.jpeg",
+    "/love/WhatsApp Image 2025-12-19 at 15.28.37.jpeg",
+    "/love/WhatsApp Image 2025-12-21 at 10.16.37.jpeg"
   ];
 
   const calculateTimeLeft = (targetDate: string) => {
@@ -84,12 +95,12 @@ export default function Home() {
   }, [images.length]);
 
   useEffect(() => {
-    const update4Months = () => {
-      setTimeLeft4Months(calculateTimeLeft('2025-12-15T00:00:00'));
+    const updateGetMonths = () => {
+      setTimeLeft4Months(calculateTimeLeft('2026-01-15T00:00:00'));
     };
 
-    update4Months();
-    const timer = setInterval(update4Months, 1000);
+    updateGetMonths();
+    const timer = setInterval(updateGetMonths, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -101,6 +112,17 @@ export default function Home() {
 
     updateTrip();
     const timer = setInterval(updateTrip, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const updateGetGoal = () => {
+      setTimeLeftGoal(calculateTimeLeft('2027-03-20T00:00:00'));
+    };
+
+    updateGetGoal();
+    const timer = setInterval(updateGetGoal, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -149,7 +171,7 @@ export default function Home() {
               Juan & Walewska
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-semibold px-2">
-              🎉 Almost 4 Beautiful Months Together! 🎉
+              🎉 Almost 5 Beautiful Months Together! 🎉
             </p>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 px-2">
               Close to do a new trip and celebrate new year! ❤️
@@ -242,7 +264,7 @@ export default function Home() {
           {/* Countdown to 4 Months */}
           <div className="text-center mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
-              Countdown to December 15th - Celebrating 4 Months of Dating
+              Countdown to January 15th - Celebrating 5 Months of Dating
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
@@ -323,6 +345,46 @@ export default function Home() {
                 </div>
                 <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
                   Seconds
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Separator */}
+          <div className="flex items-center justify-center my-6 sm:my-8 md:my-10">
+            <div className="flex-grow h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-700"></div>
+            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl">👑</div>
+            <div className="flex-grow h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-700"></div>
+          </div>
+
+          {/* Secret goal to Trip */}
+          <div className="text-center mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
+              Countdown to Complete our sacred goal
+            </h2>
+            <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+              <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {Math.floor(timeLeftGoal.days / 7)}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Weeks
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftGoal.days % 7}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Days
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-red-400 to-purple-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftGoal.hours}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Hours
                 </div>
               </div>
             </div>
