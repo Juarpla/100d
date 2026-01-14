@@ -307,7 +307,7 @@ export default function Home() {
           {/* Separator */}
           <div className="flex items-center justify-center my-6 sm:my-8 md:my-10">
             <div className="flex-grow h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-700"></div>
-            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl">??</div>
+            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl">🎉</div>
             <div className="flex-grow h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-700"></div>
           </div>
 
