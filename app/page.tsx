@@ -181,7 +181,7 @@ export default function Home() {
           </div>
 
           {/* Photo Gallery Carousel */}
-          <div className="mb-4 sm:mb-6 md:mb-8 relative overflow-hidden rounded-xl sm:rounded-2xl shadow-lg h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]">
+          <div className="mb-4 sm:mb-6 md:mb-8 relative overflow-hidden rounded-xl sm:rounded-2xl shadow-lg h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px] group">
             {images.map((img, index) => (
               <div
                 key={img}
@@ -198,16 +198,40 @@ export default function Home() {
                 />
               </div>
             ))}
-            {/* Image counter dots */}
+
+            {/* Navigation buttons */}
+            <button
+              onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+              aria-label="Previous image"
+            >
+              <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <button
+              onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+              aria-label="Next image"
+            >
+              <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            {/* Image counter dots - now clickable */}
             <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5 sm:gap-2">
               {images.map((_, index) => (
-                <div
+                <button
                   key={index}
-                  className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all ${
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all cursor-pointer hover:bg-white ${
                     index === currentImageIndex 
                       ? 'bg-white w-6 sm:w-8' 
                       : 'bg-white/50'
                   }`}
+                  aria-label={`Go to image ${index + 1}`}
                 />
               ))}
             </div>
