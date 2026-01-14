@@ -48,7 +48,9 @@ export default function Home() {
     "/love/WhatsApp Image 2025-12-11 at 18.39.13.jpeg",
     "/love/WhatsApp Image 2025-12-18 at 17.01.31.jpeg",
     "/love/WhatsApp Image 2025-12-19 at 15.28.37.jpeg",
-    "/love/WhatsApp Image 2025-12-21 at 10.16.37.jpeg"
+    "/love/Gemini_Generated_Image_2aq19h2aq19h2aq1.png",
+    "/love/WhatsApp Image 2025-12-30 at 01.25.27.jpeg",
+    "/love/WhatsApp Image 2026-01-04 at 16.34.37.jpeg"
   ];
 
   const calculateTimeLeft = (targetDate: string) => {
@@ -107,7 +109,7 @@ export default function Home() {
 
   useEffect(() => {
     const updateTrip = () => {
-      setTimeLeftTrip(calculateTimeLeft('2026-01-01T00:00:00'));
+      setTimeLeftTrip(calculateTimeLeft('2026-08-15T00:00:00'));
     };
 
     updateTrip();
@@ -174,7 +176,7 @@ export default function Home() {
               🎉 Almost 5 Beautiful Months Together! 🎉
             </p>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 px-2">
-              Close to do a new trip and celebrate new year! ❤️
+              Getting closer and closer to our one-year anniversary! ❤️
             </p>
           </div>
 
@@ -305,25 +307,33 @@ export default function Home() {
           {/* Separator */}
           <div className="flex items-center justify-center my-6 sm:my-8 md:my-10">
             <div className="flex-grow h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-700"></div>
-            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl">🌊</div>
+            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl">??</div>
             <div className="flex-grow h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent dark:via-purple-700"></div>
           </div>
 
           {/* Countdown to Trip */}
           <div className="text-center mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
-              Countdown to January 1st - Trip to Puerto Malabrigo
+              Countdown to celebrate 1 year of dating
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+            <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
                 <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
-                  {timeLeftTrip.days}
+                  {Math.floor(timeLeftTrip.days / 7)}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Weeks
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftTrip.days % 7}
                 </div>
                 <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
                   Days
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+              <div className="bg-gradient-to-br from-red-400 to-purple-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
                 <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
                   {timeLeftTrip.hours}
                 </div>
@@ -331,23 +341,7 @@ export default function Home() {
                   Hours
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-red-400 to-purple-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
-                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
-                  {timeLeftTrip.minutes}
-                </div>
-                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
-                  Minutes
-                </div>
               </div>
-              <div className="bg-gradient-to-br from-pink-500 to-red-500 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
-                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
-                  {timeLeftTrip.seconds}
-                </div>
-                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
-                  Seconds
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Separator */}
@@ -365,15 +359,15 @@ export default function Home() {
             <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
                 <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
-                  {Math.floor(timeLeftGoal.days / 7)}
+                  {Math.floor(timeLeftGoal.days / 30)}
                 </div>
                 <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
-                  Weeks
+                  Months
                 </div>
               </div>
               <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
                 <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
-                  {timeLeftGoal.days % 7}
+                  {timeLeftGoal.days % 30}
                 </div>
                 <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
                   Days
