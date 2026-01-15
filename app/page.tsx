@@ -173,7 +173,7 @@ export default function Home() {
               Juan & Walewska
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-semibold px-2">
-              🎉 Almost 5 Beautiful Months Together! 🎉
+              🎉 Almost 6 Beautiful Months Together! 🎉
             </p>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mt-1 sm:mt-2 px-2">
               Getting closer and closer to our one-year anniversary! ❤️
