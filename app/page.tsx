@@ -290,7 +290,7 @@ export default function Home() {
           {/* Countdown to 4 Months */}
           <div className="text-center mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
-              Countdown to January 15th - Celebrating 5 Months of Dating
+              Countdown to January 15th - Celebrating 6 Months of Dating
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
