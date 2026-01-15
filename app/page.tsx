@@ -98,7 +98,7 @@ export default function Home() {
 
   useEffect(() => {
     const updateGetMonths = () => {
-      setTimeLeft4Months(calculateTimeLeft('2026-01-15T00:00:00'));
+      setTimeLeft4Months(calculateTimeLeft('2026-02-15T00:00:00'));
     };
 
     updateGetMonths();
