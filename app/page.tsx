@@ -198,7 +198,7 @@ export default function Home() {
               Juan & Walewska
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-white font-semibold px-2 animate-fade-in-up drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]" style={{animationDelay: '0.1s'}}>
-              🎉 Almost 6 Beautiful Months Together! 🎉
+              🎉 Almost 7 Beautiful Months Together! 🎉
             </p>
             <p className="text-base sm:text-lg text-gray-200 mt-1 sm:mt-2 px-2 animate-fade-in-up drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" style={{animationDelay: '0.2s'}}>
               Getting closer and closer to our one-year anniversary! ❤️
