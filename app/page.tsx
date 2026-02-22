@@ -98,7 +98,7 @@ export default function Home() {
 
   useEffect(() => {
     const updateGetMonths = () => {
-      setTimeLeft4Months(calculateTimeLeft('2026-02-15T00:00:00'));
+      setTimeLeft4Months(calculateTimeLeft('2026-03-15T00:00:00'));
     };
 
     updateGetMonths();
@@ -287,10 +287,10 @@ export default function Home() {
             <div className="flex-grow h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent dark:via-pink-700"></div>
           </div>
 
-          {/* Countdown to 4 Months */}
+          {/* Countdown to 7 Months */}
           <div className="text-center mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
-              Countdown to January 15th - Celebrating 6 Months of Dating
+              Countdown to March 15th - Celebrating 7 Months of Dating
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
