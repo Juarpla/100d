@@ -36,6 +36,14 @@ export default function Home() {
     isComplete: false
   });
 
+  const [timeLeftBirthday, setTimeLeftBirthday] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isComplete: false
+  });
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
   const [isPhraseLoading, setIsPhraseLoading] = useState(true);
@@ -125,6 +133,17 @@ export default function Home() {
 
     updateGetGoal();
     const timer = setInterval(updateGetGoal, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const updateBirthday = () => {
+      setTimeLeftBirthday(calculateTimeLeft('2026-03-16T00:00:00'));
+    };
+
+    updateBirthday();
+    const timer = setInterval(updateBirthday, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -320,6 +339,54 @@ export default function Home() {
               <div className="bg-gradient-to-br from-pink-500 to-red-500 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
                 <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
                   {timeLeft4Months.seconds}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Seconds
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Separator */}
+          <div className="flex items-center justify-center my-6 sm:my-8 md:my-10">
+            <div className="flex-grow h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent dark:via-pink-700"></div>
+            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl">🎂</div>
+            <div className="flex-grow h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent dark:via-pink-700"></div>
+          </div>
+
+          {/* Wale's Birthday Countdown */}
+          <div className="text-center mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6 px-2">
+              Countdown to Wale&apos;s Birthday 🥳
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+              <div className="bg-gradient-to-br from-pink-400 to-red-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftBirthday.days}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Days
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftBirthday.hours}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Hours
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-red-400 to-purple-400 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftBirthday.minutes}
+                </div>
+                <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
+                  Minutes
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-pink-500 to-red-500 rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                  {timeLeftBirthday.seconds}
                 </div>
                 <div className="text-xs sm:text-sm md:text-base text-white/90 font-medium">
                   Seconds
