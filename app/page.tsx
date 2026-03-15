@@ -106,7 +106,7 @@ export default function Home() {
 
   useEffect(() => {
     const updateGetMonths = () => {
-      setTimeLeft4Months(calculateTimeLeft('2026-03-15T00:00:00'));
+      setTimeLeft4Months(calculateTimeLeft('2026-04-15T00:00:00'));
     };
 
     updateGetMonths();
@@ -198,7 +198,7 @@ export default function Home() {
               Juan & Walewska
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-white font-semibold px-2 animate-fade-in-up drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]" style={{animationDelay: '0.1s'}}>
-              🎉 Almost 7 Beautiful Months Together! 🎉
+              🎉 Almost 8 Beautiful Months Together! 🎉
             </p>
             <p className="text-base sm:text-lg text-gray-200 mt-1 sm:mt-2 px-2 animate-fade-in-up drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" style={{animationDelay: '0.2s'}}>
               Getting closer and closer to our one-year anniversary! ❤️
@@ -321,10 +321,10 @@ export default function Home() {
             <div className="grow h-px bg-gradient-to-r from-transparent via-pink-400/70 to-transparent"></div>
           </div>
 
-          {/* Countdown to 7 Months - Apple Style */}
+          {/* Countdown to 8 Months - Apple Style */}
           <div className="text-center mb-4 sm:mb-6 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6 px-2 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Countdown to March 15th - Celebrating 7 Months of Dating
+              Countdown to April 15th - Celebrating 8 Months of Dating
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
