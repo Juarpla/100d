@@ -36,14 +36,6 @@ export default function Home() {
     isComplete: false
   });
 
-  const [timeLeftBirthday, setTimeLeftBirthday] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    isComplete: false
-  });
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
   const [isPhraseLoading, setIsPhraseLoading] = useState(true);
@@ -56,9 +48,17 @@ export default function Home() {
     "/love/WhatsApp Image 2025-12-11 at 18.39.13.jpeg",
     "/love/WhatsApp Image 2025-12-18 at 17.01.31.jpeg",
     "/love/WhatsApp Image 2025-12-19 at 15.28.37.jpeg",
-    "/love/Gemini_Generated_Image_2aq19h2aq19h2aq1.png",
+    "/love/WhatsApp Image 2025-12-21 at 10.16.37.jpeg",
     "/love/WhatsApp Image 2025-12-30 at 01.25.27.jpeg",
-    "/love/WhatsApp Image 2026-01-04 at 16.34.37.jpeg"
+    "/love/WhatsApp Image 2026-01-04 at 16.34.37.jpeg",
+    "/love/WhatsApp Image 2026-02-24 at 22.19.43.jpg",
+    "/love/WhatsApp Image 2026-03-01 at 19.34.03.jpeg",
+    "/love/WhatsApp Image 2026-03-04 at 00.57.56.jpeg",
+    "/love/WhatsApp Image 2026-03-06 at 01.02.48 (1).jpg",
+    "/love/WhatsApp Image 2026-03-06 at 01.02.48.jpg",
+    "/love/WhatsApp Image 2026-03-17 at 00.45.58.jpeg",
+    "/love/WhatsApp Image 2026-03-17 at 00.53.04.jpeg",
+    "/love/Gemini_Generated_Image_2aq19h2aq19h2aq1.png"
   ];
 
   const calculateTimeLeft = (targetDate: string) => {
@@ -133,17 +133,6 @@ export default function Home() {
 
     updateGetGoal();
     const timer = setInterval(updateGetGoal, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const updateBirthday = () => {
-      setTimeLeftBirthday(calculateTimeLeft('2026-03-16T00:00:00'));
-    };
-
-    updateBirthday();
-    const timer = setInterval(updateBirthday, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -358,58 +347,6 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-600/0 group-hover:from-pink-500/20 group-hover:to-red-600/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
                 <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                   {timeLeft4Months.seconds}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Seconds
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Separator - Birthday */}
-          <div className="flex items-center justify-center my-6 sm:my-8 md:my-10 animate-fade-in-up" style={{animationDelay: '0.7s'}}>
-            <div className="grow h-px bg-gradient-to-r from-transparent via-pink-400/70 to-transparent"></div>
-            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl animate-pulse-gentle drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">🎂</div>
-            <div className="grow h-px bg-gradient-to-r from-transparent via-pink-400/70 to-transparent"></div>
-          </div>
-
-          {/* Wale's Birthday Countdown - Apple Style */}
-          <div className="text-center mb-4 sm:mb-6 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6 px-2 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Countdown to Wale&apos;s Birthday 🎉
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
-              <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-500/0 group-hover:from-pink-500/20 group-hover:to-red-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeftBirthday.days}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Days
-                </div>
-              </div>
-              <div className="group relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeftBirthday.hours}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Hours
-                </div>
-              </div>
-              <div className="group relative bg-gradient-to-br from-red-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-red-400/30 hover:border-red-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-purple-500/0 group-hover:from-red-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeftBirthday.minutes}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Minutes
-                </div>
-              </div>
-              <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-600/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-600/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-600/0 group-hover:from-pink-500/20 group-hover:to-red-600/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeftBirthday.seconds}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                   Seconds
