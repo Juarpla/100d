@@ -58,7 +58,10 @@ export default function Home() {
     "/love/WhatsApp Image 2026-03-06 at 01.02.48.jpg",
     "/love/WhatsApp Image 2026-03-17 at 00.45.58.jpeg",
     "/love/WhatsApp Image 2026-03-17 at 00.53.04.jpeg",
-    "/love/Gemini_Generated_Image_2aq19h2aq19h2aq1.png"
+    "/love/Gemini_Generated_Image_2aq19h2aq19h2aq1.png",
+    "/love/WhatsApp Image 2026-03-26 at 23.44.43.jpg",
+    "/love/WhatsApp Image 2026-04-05 at 21.44.13.jpg",
+    "/love/WhatsApp Image 2026-04-15 at 23.19.04.jpeg"
   ];
 
   const calculateTimeLeft = (targetDate: string) => {
@@ -415,9 +418,6 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
                 <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                   {Math.floor(timeLeftGoal.days / 30)}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white/70 font-medium mt-1 tracking-wider">
-                  Months
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                   Months
