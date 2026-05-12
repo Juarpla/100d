@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "J&W - 4 Months of Love",
-  description: "Celebrating Juan & Walewska's 4 Months together",
+  title: "J&W - Goals of Love",
+  description: "Celebrating Juan & Walewska's Each Months together",
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
