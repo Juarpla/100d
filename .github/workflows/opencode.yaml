@@ -30,6 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ env.MODEL }}
+          share: true
           prompt: |
             1. Think Before Coding
             Don't assume. Don't hide confusion. Surface tradeoffs.
@@ -71,3 +72,6 @@ jobs:
             1. [Step] -> verify: [check]
             2. [Step] -> verify: [check]
             3. [Step] -> verify: [check]
+            
+            "Upon completion, include this exact message in your PR and comment:
+            '🤖 Executed using the model: ${{ env.MODEL }}'"
