@@ -1,7 +1,13 @@
 'use client';
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+
+interface Toast {
+  id: number;
+  message: string;
+  type: "success" | "info";
+}
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({
@@ -39,6 +45,16 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
   const [isPhraseLoading, setIsPhraseLoading] = useState(true);
+  const [toasts, setToasts] = useState<Toast[]>([]);
+  const toastIdRef = { current: 0 };
+
+  const showToast = useCallback((message: string, type: "success" | "info" = "success") => {
+    const id = ++toastIdRef.current;
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 3000);
+  }, []);
 
   const images = [
     "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
@@ -148,17 +164,17 @@ export default function Home() {
         const data = await response.json();
         if (data.phrase) {
           setLovePhrase(data.phrase);
+          showToast("New inspiration loaded!", "success");
         }
       } catch (error) {
         console.error('Error fetching love phrase:', error);
-        // Keep the default phrase on error
       } finally {
         setIsPhraseLoading(false);
       }
     };
 
     fetchLovePhrase();
-  }, []);
+  }, [showToast]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden">
@@ -222,7 +238,11 @@ export default function Home() {
 
               {/* Navigation buttons - Apple Style */}
               <button
-                onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
+                onClick={() => {
+                  const newIndex = (currentImageIndex - 1 + images.length) % images.length;
+                  setCurrentImageIndex(newIndex);
+                  showToast(`Image ${newIndex + 1} of ${images.length}`, "info");
+                }}
                 className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110"
                 aria-label="Previous image"
               >
@@ -232,7 +252,11 @@ export default function Home() {
               </button>
 
               <button
-                onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
+                onClick={() => {
+                  const newIndex = (currentImageIndex + 1) % images.length;
+                  setCurrentImageIndex(newIndex);
+                  showToast(`Image ${newIndex + 1} of ${images.length}`, "info");
+                }}
                 className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110"
                 aria-label="Next image"
               >
@@ -444,18 +468,27 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Love message - Apple Glassmorphism */}
+{/* Love message - Apple Glassmorphism */}
           <div className="text-center mt-4 sm:mt-6 md:mt-8 p-4 sm:p-5 md:p-6 bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl hover:bg-white/[0.15] transition-all duration-700 animate-fade-in-up" style={{animationDelay: '1.3s'}}>
             {isPhraseLoading ? (
-              <p className="text-base sm:text-lg md:text-xl text-gray-300 italic leading-relaxed animate-pulse-gentle drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 italic leading-relaxed animate-pulse-gentle drop-shadow-[0_2px 4px_rgba(0,0,0,0.6)]">
                 Loading inspiration...
               </p>
             ) : (
-              <p className="text-base sm:text-lg md:text-xl text-white italic leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              <p className="text-base sm:text-lg md:text-xl text-white italic leading-relaxed drop-shadow-[0_2px 4px_rgba(0,0,0,0.8)]">
                 &ldquo;{lovePhrase}&rdquo; 💑
               </p>
             )}
           </div>
+        </div>
+
+        {/* Toast Notifications */}
+        <div className="toast-container">
+          {toasts.map((toast) => (
+            <div key={toast.id} className={`toast toast-${toast.type}`}>
+              <p className="toast-message">{toast.message}</p>
+            </div>
+          ))}
         </div>
       </main>
     </div>
