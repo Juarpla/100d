@@ -145,7 +145,13 @@ body {
 
 /* Smooth transitions */
 * {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+:focus-visible {
+  outline: 2px solid rgba(236, 72, 153, 0.8);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Custom scrollbar for webkit browsers */
@@ -172,5 +178,38 @@ body {
 
 .delay-700 {
   animation-delay: 700ms;
+}
+
+/* Accessibility - Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* GPU acceleration for smoother animations */
+.animate-float-slow,
+.animate-float-reverse,
+.animate-float-gentle,
+.animate-float-gentle-reverse,
+.animate-gradient,
+.animate-pulse-slow,
+.animate-pulse-gentle {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Improved touch responsiveness */
+@media (hover: none) {
+  .group:active .animate-float-slow,
+  .group:active .animate-float-reverse {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-out;
+  }
 }
 
