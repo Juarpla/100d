@@ -7,6 +7,7 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
+  id-token: write
 
 env:
   MODEL: ${{ vars.MODEL || 'opencode/minimax-m2.5-free' }}
@@ -29,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ env.MODEL }}
-          instructions: |
+          prompt: |
             1. Think Before Coding
             Don't assume. Don't hide confusion. Surface tradeoffs.
             LLMs often pick an interpretation silently and run with it. This principle forces explicit reasoning:
