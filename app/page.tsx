@@ -64,6 +64,23 @@ export default function Home() {
     "/love/WhatsApp Image 2026-04-15 at 23.19.04.jpeg"
   ];
 
+  const downloadImage = async (imageUrl: string, index: number) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `memory-${index + 1}${imageUrl.split('.').pop()}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading image:', error);
+    }
+  };
+
   const calculateTimeLeft = (targetDate: string) => {
     const target = new Date(targetDate).getTime();
     const now = new Date().getTime();
@@ -238,6 +255,17 @@ export default function Home() {
               >
                 <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {/* Download button - Apple Style */}
+              <button
+                onClick={() => downloadImage(images[currentImageIndex], currentImageIndex)}
+                className="absolute right-2 sm:right-4 top-2 sm:top-4 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 z-10"
+                aria-label="Download current image"
+              >
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
               </button>
 
