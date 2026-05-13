@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useToast } from "./contexts/ToastContext";
 
 export default function Home() {
+  const { showToast } = useToast();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -222,7 +224,10 @@ export default function Home() {
 
               {/* Navigation buttons - Apple Style */}
               <button
-                onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
+                onClick={() => {
+                  setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+                  showToast('Previous memory', 'info');
+                }}
                 className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110"
                 aria-label="Previous image"
               >
@@ -232,7 +237,10 @@ export default function Home() {
               </button>
 
               <button
-                onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
+                onClick={() => {
+                  setCurrentImageIndex((prev) => (prev + 1) % images.length);
+                  showToast('Next memory', 'info');
+                }}
                 className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110"
                 aria-label="Next image"
               >
@@ -246,7 +254,10 @@ export default function Home() {
                 {images.map((_, index) => (
                   <button
                     key={index}
-                    onClick={() => setCurrentImageIndex(index)}
+                    onClick={() => {
+                      setCurrentImageIndex(index);
+                      showToast(`Viewing memory ${index + 1}`, 'info');
+                    }}
                     className={`h-1.5 sm:h-2 rounded-full transition-all duration-500 cursor-pointer ${
                       index === currentImageIndex 
                         ? 'bg-white w-6 sm:w-8 shadow-lg shadow-white/50' 
