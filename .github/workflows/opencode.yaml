@@ -77,7 +77,7 @@ jobs:
             "Upon completion, include this exact message in your PR and comment:
             '🤖 Executed using the model: ${{ env.MODEL }}'"
 
-      - name: Fix share URL in comments
+      - name: Fix share URL
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -85,18 +85,52 @@ jobs:
         run: |
           REPO="${{ github.repository }}"
           ISSUE_NUMBER="${{ github.event.issue.number }}"
-          
-          # Find all comments containing the old share URL pattern
-          COMMENT_IDS=$(gh api "repos/$REPO/issues/$ISSUE_NUMBER/comments" \
-            --jq '.[] | select(.body | test("opencode\\.ai/s/")) | .id')
-          
-          for COMMENT_ID in $COMMENT_IDS; do
-            [ -z "$COMMENT_ID" ] && continue
-            # Get comment, replace URL, save to temp file, then PATCH
+          OLD_PATTERN="https://opencode.ai/s/"
+          NEW_PATTERN="https://opncd.ai/share/"
+
+          fix_comment() {
+            local comment_id=$1
             TMPFILE=$(mktemp)
-            gh api "repos/$REPO/issues/comments/$COMMENT_ID" \
-              | jq '{body: (.body | gsub("https://opencode\\.ai/s/"; "https://opncd.ai/share/"))}' \
-              > "$TMPFILE"
-            gh api "repos/$REPO/issues/comments/$COMMENT_ID" -X PATCH --input "$TMPFILE" --silent
+            gh api "repos/$REPO/issues/comments/$comment_id" \
+              | jq --arg old "$OLD_PATTERN" --arg new "$NEW_PATTERN" \
+                '{body: (.body | gsub($old; $new))}' > "$TMPFILE"
+            gh api "repos/$REPO/issues/comments/$comment_id" -X PATCH --input "$TMPFILE" --silent
             rm -f "$TMPFILE"
+            echo "  Fixed comment $comment_id"
+          }
+
+          fix_pr_body() {
+            local pr_number=$1
+            TMPFILE=$(mktemp)
+            gh api "repos/$REPO/pulls/$pr_number" \
+              | jq --arg old "$OLD_PATTERN" --arg new "$NEW_PATTERN" \
+                '{body: (.body | gsub($old; $new))}' > "$TMPFILE"
+            gh api "repos/$REPO/pulls/$pr_number" -X PATCH --input "$TMPFILE" --silent
+            rm -f "$TMPFILE"
+            echo "  Fixed PR #$pr_number body"
+          }
+
+          echo "=== Fixing share URLs in issue #$ISSUE_NUMBER comments ==="
+          COMMENT_IDS=$(gh api "repos/$REPO/issues/$ISSUE_NUMBER/comments" --paginate \
+            --jq ".[] | select(.body | contains(\"$OLD_PATTERN\")) | .id")
+          for CID in $COMMENT_IDS; do
+            fix_comment "$CID"
           done
+
+          echo "=== Checking open PRs ==="
+          PR_NUMBERS=$(gh pr list --repo "$REPO" --state open --json number --jq '.[].number')
+          for PR in $PR_NUMBERS; do
+            # Fix PR body if it contains the old URL
+            PR_BODY=$(gh api "repos/$REPO/pulls/$PR" --jq '.body // empty')
+            if echo "$PR_BODY" | grep -qF "$OLD_PATTERN"; then
+              fix_pr_body "$PR"
+            fi
+            # Fix comments on the PR
+            PR_CIDS=$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+              --jq ".[] | select(.body | contains(\"$OLD_PATTERN\")) | .id")
+            for CID in $PR_CIDS; do
+              fix_comment "$CID"
+            done
+          done
+
+          echo "=== Done ==="
