@@ -1,7 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({
@@ -35,6 +35,21 @@ export default function Home() {
     seconds: 0,
     isComplete: false
   });
+
+  const prevTimeLeftRef = useRef({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const prevTimeLeft4MonthsRef = useRef({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const prevTimeLeftTripRef = useRef({ days: 0, hours: 0 });
+  const prevTimeLeftGoalRef = useRef({ days: 0, hours: 0 });
+  const [animatedSeconds, setAnimatedSeconds] = useState(false);
+  const [animatedMinutes, setAnimatedMinutes] = useState(false);
+  const [animatedHours, setAnimatedHours] = useState(false);
+  const [animatedDays4M, setAnimatedDays4M] = useState(false);
+  const [animatedMinutes4M, setAnimatedMinutes4M] = useState(false);
+  const [animatedHours4M, setAnimatedHours4M] = useState(false);
+  const [animatedDaysTrip, setAnimatedDaysTrip] = useState(false);
+  const [animatedHoursTrip, setAnimatedHoursTrip] = useState(false);
+  const [animatedDaysGoal, setAnimatedDaysGoal] = useState(false);
+  const [animatedHoursGoal, setAnimatedHoursGoal] = useState(false);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
@@ -177,6 +192,62 @@ export default function Home() {
     fetchLovePhrase();
   }, []);
 
+  useEffect(() => {
+    if (prevTimeLeftRef.current.seconds !== timeLeft.seconds) {
+      setAnimatedSeconds(true);
+      setTimeout(() => setAnimatedSeconds(false), 300);
+    }
+    if (prevTimeLeftRef.current.minutes !== timeLeft.minutes) {
+      setAnimatedMinutes(true);
+      setTimeout(() => setAnimatedMinutes(false), 300);
+    }
+    if (prevTimeLeftRef.current.hours !== timeLeft.hours) {
+      setAnimatedHours(true);
+      setTimeout(() => setAnimatedHours(false), 300);
+    }
+    prevTimeLeftRef.current = { days: timeLeft.days, hours: timeLeft.hours, minutes: timeLeft.minutes, seconds: timeLeft.seconds };
+  }, [timeLeft]);
+
+  useEffect(() => {
+    if (prevTimeLeft4MonthsRef.current.days !== timeLeft4Months.days) {
+      setAnimatedDays4M(true);
+      setTimeout(() => setAnimatedDays4M(false), 300);
+    }
+    if (prevTimeLeft4MonthsRef.current.minutes !== timeLeft4Months.minutes) {
+      setAnimatedMinutes4M(true);
+      setTimeout(() => setAnimatedMinutes4M(false), 300);
+    }
+    if (prevTimeLeft4MonthsRef.current.hours !== timeLeft4Months.hours) {
+      setAnimatedHours4M(true);
+      setTimeout(() => setAnimatedHours4M(false), 300);
+    }
+    prevTimeLeft4MonthsRef.current = { days: timeLeft4Months.days, hours: timeLeft4Months.hours, minutes: timeLeft4Months.minutes, seconds: timeLeft4Months.seconds };
+  }, [timeLeft4Months]);
+
+  useEffect(() => {
+    if (prevTimeLeftTripRef.current.days !== timeLeftTrip.days) {
+      setAnimatedDaysTrip(true);
+      setTimeout(() => setAnimatedDaysTrip(false), 300);
+    }
+    if (prevTimeLeftTripRef.current.hours !== timeLeftTrip.hours) {
+      setAnimatedHoursTrip(true);
+      setTimeout(() => setAnimatedHoursTrip(false), 300);
+    }
+    prevTimeLeftTripRef.current = { days: timeLeftTrip.days, hours: timeLeftTrip.hours };
+  }, [timeLeftTrip]);
+
+  useEffect(() => {
+    if (prevTimeLeftGoalRef.current.days !== timeLeftGoal.days) {
+      setAnimatedDaysGoal(true);
+      setTimeout(() => setAnimatedDaysGoal(false), 300);
+    }
+    if (prevTimeLeftGoalRef.current.hours !== timeLeftGoal.hours) {
+      setAnimatedHoursGoal(true);
+      setTimeout(() => setAnimatedHoursGoal(false), 300);
+    }
+    prevTimeLeftGoalRef.current = { days: timeLeftGoal.days, hours: timeLeftGoal.hours };
+  }, [timeLeftGoal]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden">
       {/* Animated gradient background */}
@@ -305,7 +376,7 @@ export default function Home() {
                 </div>
                 <div className="group relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                  <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                  <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedHours ? 'animate-counter-change' : ''}`}>
                     {timeLeft.hours}
                   </div>
                   <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -314,7 +385,7 @@ export default function Home() {
                 </div>
                 <div className="group relative bg-gradient-to-br from-red-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-red-400/30 hover:border-red-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/30">
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-purple-500/0 group-hover:from-red-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                  <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                  <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedMinutes ? 'animate-counter-change' : ''}`}>
                     {timeLeft.minutes}
                   </div>
                   <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -323,7 +394,7 @@ export default function Home() {
                 </div>
                 <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-600/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-600/30">
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-600/0 group-hover:from-pink-500/20 group-hover:to-red-600/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                  <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                  <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedSeconds ? 'animate-counter-change' : ''}`}>
                     {timeLeft.seconds}
                   </div>
                   <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -358,7 +429,7 @@ export default function Home() {
               </div>
               <div className="group relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedHours4M ? 'animate-counter-change' : ''}`}>
                   {timeLeft4Months.hours}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -367,7 +438,7 @@ export default function Home() {
               </div>
               <div className="group relative bg-gradient-to-br from-red-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-red-400/30 hover:border-red-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-purple-500/0 group-hover:from-red-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedMinutes4M ? 'animate-counter-change' : ''}`}>
                   {timeLeft4Months.minutes}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -401,7 +472,7 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-blue-500/30 to-cyan-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-blue-400/30 hover:border-blue-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-cyan-500/0 group-hover:from-blue-500/20 group-hover:to-cyan-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-200 to-cyan-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-200 to-cyan-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedDaysTrip ? 'animate-counter-change' : ''}`}>
                   {Math.floor(timeLeftTrip.days / 7)}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -410,7 +481,7 @@ export default function Home() {
               </div>
               <div className="group relative bg-gradient-to-br from-purple-500/30 to-blue-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/20 group-hover:to-blue-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-blue-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-blue-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedDaysTrip ? 'animate-counter-change' : ''}`}>
                   {timeLeftTrip.days % 7}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -419,7 +490,7 @@ export default function Home() {
               </div>
               <div className="group relative bg-gradient-to-br from-cyan-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-cyan-400/30 hover:border-cyan-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover:from-cyan-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-cyan-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-cyan-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedHoursTrip ? 'animate-counter-change' : ''}`}>
                   {timeLeftTrip.hours}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -444,7 +515,7 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedDaysGoal ? 'animate-counter-change' : ''}`}>
                   {Math.floor(timeLeftGoal.days / 30)}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -453,7 +524,7 @@ export default function Home() {
               </div>
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-purple-500/0 group-hover:from-pink-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedDaysGoal ? 'animate-counter-change' : ''}`}>
                   {timeLeftGoal.days % 30}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
@@ -462,7 +533,7 @@ export default function Home() {
               </div>
               <div className="group relative bg-gradient-to-br from-purple-600/30 to-pink-600/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-600/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/20 group-hover:to-pink-600/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                <div className={`relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] ${animatedHoursGoal ? 'animate-counter-change' : ''}`}>
                   {timeLeftGoal.hours}
                 </div>
                 <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
