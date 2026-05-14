@@ -80,9 +80,10 @@ Created with ❤️ for Juan & Walewska`;
   const copyReportToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(generateReportText());
-      setShowExportMenu(false);
     } catch (error) {
       console.error('Error copying to clipboard:', error);
+    } finally {
+      setShowExportMenu(false);
     }
   };
 
@@ -90,21 +91,27 @@ Created with ❤️ for Juan & Walewska`;
     try {
       const imageUrl = images[currentImageIndex];
       const response = await fetch(imageUrl);
-      let blob = await response.blob();
-      const ext = imageUrl.split('.').pop()?.toLowerCase() ?? '';
-      const mime =
-        blob.type && blob.type !== 'application/octet-stream'
-          ? blob.type
-          : ext === 'png'
-            ? 'image/png'
-            : 'image/jpeg';
-      if (blob.type !== mime) {
-        blob = new Blob([await blob.arrayBuffer()], { type: mime });
+      const inputBlob = await response.blob();
+      const bitmap = await createImageBitmap(inputBlob);
+      const canvas = document.createElement('canvas');
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        throw new Error('Could not get canvas context');
       }
-      await navigator.clipboard.write([new ClipboardItem({ [mime]: blob })]);
-      setShowExportMenu(false);
+      ctx.drawImage(bitmap, 0, 0);
+      bitmap.close();
+      const pngBlob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
+      });
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': pngBlob }),
+      ]);
     } catch (error) {
       console.error('Error copying image to clipboard:', error);
+    } finally {
+      setShowExportMenu(false);
     }
   };
 
@@ -269,7 +276,8 @@ Created with ❤️ for Juan & Walewska`;
                 {showExportMenu && (
                   <div className="absolute right-0 mt-2 bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-xl border border-white/20 overflow-hidden z-50 min-w-[200px]">
                     <button
-                      onClick={copyReportToClipboard}
+                      type="button"
+                      onClick={() => void copyReportToClipboard()}
                       className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -278,14 +286,15 @@ Created with ❤️ for Juan & Walewska`;
                       Copy Text
                     </button>
                     <button
-                      onClick={copyCurrentImageToClipboard}
+                      type="button"
+                      onClick={() => void copyCurrentImageToClipboard()}
                       className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm"
-                      aria-label="Copiar la foto visible como imagen"
+                      aria-label="Copy visible photo as picture"
                     >
                       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      Copiar como imagen
+                      Copy as Picture
                     </button>
                   </div>
                 )}
