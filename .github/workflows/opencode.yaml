@@ -76,3 +76,24 @@ jobs:
             
             "Upon completion, include this exact message in your PR and comment:
             '🤖 Executed using the model: ${{ env.MODEL }}'"
+
+      - name: Fix share URL in comments
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          REPO="${{ github.repository }}"
+          ISSUE_NUMBER="${{ github.event.issue.number }}"
+          
+          # Find all comments containing the old share URL pattern
+          COMMENT_IDS=$(gh api "repos/$REPO/issues/$ISSUE_NUMBER/comments" \
+            --jq '.[] | select(.body | test("opencode\\.ai/s/")) | .id')
+          
+          for COMMENT_ID in $COMMENT_IDS; do
+            [ -z "$COMMENT_ID" ] && continue
+            # Replace the URL pattern in the comment body using jq
+            gh api "repos/$REPO/issues/comments/$COMMENT_ID" \
+              | jq '{body: (.body | gsub("https://opencode\\.ai/s/"; "https://opncd.ai/share/"))}' \
+              | gh api "repos/$REPO/issues/comments/$COMMENT_ID" -X PATCH --input @- --silent
+          done
