@@ -192,6 +192,42 @@ body {
   }
 }
 
+/* Counter number pop animation */
+@keyframes counter-pop {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-counter-pop {
+  animation: counter-pop 0.3s ease-out;
+}
+
+.animate-counter-pop-days {
+  animation: counter-pop 0.4s ease-out;
+}
+
+.animate-counter-pop-hours {
+  animation: counter-pop 0.35s ease-out;
+}
+
+.animate-counter-pop-minutes {
+  animation: counter-pop 0.3s ease-out;
+}
+
+.animate-counter-pop-seconds {
+  animation: counter-pop 0.25s ease-out;
+}
+
 /* GPU acceleration for smoother animations */
 .animate-float-slow,
 .animate-float-reverse,

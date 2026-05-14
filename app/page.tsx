@@ -2,6 +2,31 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Counter from "./components/Counter";
+
+const images = [
+  "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
+  "/love/WhatsApp Image 2025-11-14 at 17.45.19 (1).jpeg",
+  "/love/WhatsApp Image 2025-11-14 at 17.45.19 (2).jpeg",
+  "/love/WhatsApp Image 2025-12-09 at 00.41.54.jpeg",
+  "/love/WhatsApp Image 2025-12-11 at 18.39.13.jpeg",
+  "/love/WhatsApp Image 2025-12-18 at 17.01.31.jpeg",
+  "/love/WhatsApp Image 2025-12-19 at 15.28.37.jpeg",
+  "/love/WhatsApp Image 2025-12-21 at 10.16.37.jpeg",
+  "/love/WhatsApp Image 2025-12-30 at 01.25.27.jpeg",
+  "/love/WhatsApp Image 2026-01-04 at 16.34.37.jpeg",
+  "/love/WhatsApp Image 2026-02-24 at 22.19.43.jpg",
+  "/love/WhatsApp Image 2026-03-01 at 19.34.03.jpeg",
+  "/love/WhatsApp Image 2026-03-04 at 00.57.56.jpeg",
+  "/love/WhatsApp Image 2026-03-06 at 01.02.48 (1).jpg",
+  "/love/WhatsApp Image 2026-03-06 at 01.02.48.jpg",
+  "/love/WhatsApp Image 2026-03-17 at 00.45.58.jpeg",
+  "/love/WhatsApp Image 2026-03-17 at 00.53.04.jpeg",
+  "/love/Gemini_Generated_Image_2aq19h2aq19h2aq1.png",
+  "/love/WhatsApp Image 2026-03-26 at 23.44.43.jpg",
+  "/love/WhatsApp Image 2026-04-05 at 21.44.13.jpg",
+  "/love/WhatsApp Image 2026-04-15 at 23.19.04.jpeg"
+];
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({
@@ -39,30 +64,48 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
   const [isPhraseLoading, setIsPhraseLoading] = useState(true);
+  const [imageOrder, setImageOrder] = useState<number[]>(images.map((_, index) => index));
 
-  const images = [
-    "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
-    "/love/WhatsApp Image 2025-11-14 at 17.45.19 (1).jpeg",
-    "/love/WhatsApp Image 2025-11-14 at 17.45.19 (2).jpeg",
-    "/love/WhatsApp Image 2025-12-09 at 00.41.54.jpeg",
-    "/love/WhatsApp Image 2025-12-11 at 18.39.13.jpeg",
-    "/love/WhatsApp Image 2025-12-18 at 17.01.31.jpeg",
-    "/love/WhatsApp Image 2025-12-19 at 15.28.37.jpeg",
-    "/love/WhatsApp Image 2025-12-21 at 10.16.37.jpeg",
-    "/love/WhatsApp Image 2025-12-30 at 01.25.27.jpeg",
-    "/love/WhatsApp Image 2026-01-04 at 16.34.37.jpeg",
-    "/love/WhatsApp Image 2026-02-24 at 22.19.43.jpg",
-    "/love/WhatsApp Image 2026-03-01 at 19.34.03.jpeg",
-    "/love/WhatsApp Image 2026-03-04 at 00.57.56.jpeg",
-    "/love/WhatsApp Image 2026-03-06 at 01.02.48 (1).jpg",
-    "/love/WhatsApp Image 2026-03-06 at 01.02.48.jpg",
-    "/love/WhatsApp Image 2026-03-17 at 00.45.58.jpeg",
-    "/love/WhatsApp Image 2026-03-17 at 00.53.04.jpeg",
-    "/love/Gemini_Generated_Image_2aq19h2aq19h2aq1.png",
-    "/love/WhatsApp Image 2026-03-26 at 23.44.43.jpg",
-    "/love/WhatsApp Image 2026-04-05 at 21.44.13.jpg",
-    "/love/WhatsApp Image 2026-04-15 at 23.19.04.jpeg"
-  ];
+  const moveImageUp = (index: number) => {
+    if (index === 0) return;
+    const newOrder = [...imageOrder];
+    [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
+    setImageOrder(newOrder);
+    if (currentImageIndex === index) {
+      setCurrentImageIndex(index - 1);
+    } else if (currentImageIndex === index - 1) {
+      setCurrentImageIndex(index);
+    }
+  };
+
+  const moveImageDown = (index: number) => {
+    if (index === imageOrder.length - 1) return;
+    const newOrder = [...imageOrder];
+    [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
+    setImageOrder(newOrder);
+    if (currentImageIndex === index) {
+      setCurrentImageIndex(index + 1);
+    } else if (currentImageIndex === index + 1) {
+      setCurrentImageIndex(index);
+    }
+  };
+
+  const downloadImage = async (imageUrl: string, index: number) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `memory-${index + 1}${imageUrl.split('.').pop()}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading image:', error);
+    }
+  };
 
   const calculateTimeLeft = (targetDate: string) => {
     const target = new Date(targetDate).getTime();
@@ -101,11 +144,11 @@ export default function Home() {
 
   useEffect(() => {
     const imageTimer = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      setCurrentImageIndex((prev) => (prev + 1) % imageOrder.length);
     }, 3000);
 
     return () => clearInterval(imageTimer);
-  }, [images.length]);
+  }, [imageOrder.length]);
 
   useEffect(() => {
     const updateGetMonths = () => {
@@ -203,27 +246,27 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl"></div>
 
             <div className="relative h-full rounded-2xl sm:rounded-3xl overflow-hidden">
-              {images.map((img, index) => (
+              {imageOrder.map((imageIdx, displayIdx) => (
                 <div
-                  key={img}
+                  key={images[imageIdx]}
                   className={`absolute inset-0 transition-all duration-1000 ${
-                    index === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                    displayIdx === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
                   }`}
                 >
                   <Image
-                    src={img}
-                    alt={`Memory ${index + 1}`}
+                    src={images[imageIdx]}
+                    alt={`Memory ${imageIdx + 1}`}
                     fill
                     className="object-cover"
-                    priority={index === 0}
+                    priority={displayIdx === 0}
                   />
                 </div>
               ))}
 
               {/* Navigation buttons - Apple Style */}
               <button
-                onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
-                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110"
+                onClick={() => setCurrentImageIndex((prev) => (prev - 1 + imageOrder.length) % imageOrder.length)}
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 flex items-center justify-center"
                 aria-label="Previous image"
               >
                 <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -232,8 +275,8 @@ export default function Home() {
               </button>
 
               <button
-                onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
-                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110"
+                onClick={() => setCurrentImageIndex((prev) => (prev + 1) % imageOrder.length)}
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 flex items-center justify-center"
                 aria-label="Next image"
               >
                 <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -241,9 +284,44 @@ export default function Home() {
                 </svg>
               </button>
 
+              {/* Download button - Apple Style */}
+              <button
+                onClick={() => downloadImage(images[imageOrder[currentImageIndex]], imageOrder[currentImageIndex])}
+                className="absolute right-2 sm:right-4 top-2 sm:top-4 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 z-10 flex items-center justify-center"
+                aria-label="Download current image"
+              >
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </button>
+
+              {/* Reorder buttons - Apple Style */}
+              <div className="absolute left-2 sm:left-4 top-2 sm:top-4 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+                <button
+                  onClick={() => moveImageUp(currentImageIndex)}
+                  disabled={currentImageIndex === 0}
+                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
+                  aria-label="Move image up"
+                >
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => moveImageDown(currentImageIndex)}
+                  disabled={currentImageIndex === imageOrder.length - 1}
+                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
+                  aria-label="Move image down"
+                >
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+
               {/* Image counter dots - Minimalist Apple Style */}
               <div className="absolute bottom-3 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5 sm:gap-2 bg-black/20 backdrop-blur-md px-3 py-2 rounded-full">
-                {images.map((_, index) => (
+                {imageOrder.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
@@ -268,39 +346,39 @@ export default function Home() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
                 <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-500/0 group-hover:from-pink-500/20 group-hover:to-red-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                  <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                    {timeLeft.days}
-                  </div>
-                  <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                    Days
-                  </div>
+                  <Counter
+                    value={timeLeft.days}
+                    label="Days"
+                    animationType="days"
+                    className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                  />
                 </div>
                 <div className="group relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                  <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                    {timeLeft.hours}
-                  </div>
-                  <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                    Hours
-                  </div>
+                  <Counter
+                    value={timeLeft.hours}
+                    label="Hours"
+                    animationType="hours"
+                    className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                  />
                 </div>
                 <div className="group relative bg-gradient-to-br from-red-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-red-400/30 hover:border-red-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/30">
                   <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-purple-500/0 group-hover:from-red-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                  <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                    {timeLeft.minutes}
-                  </div>
-                  <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                    Minutes
-                  </div>
+                  <Counter
+                    value={timeLeft.minutes}
+                    label="Minutes"
+                    animationType="minutes"
+                    className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                  />
                 </div>
                 <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-600/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-600/30">
                   <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-600/0 group-hover:from-pink-500/20 group-hover:to-red-600/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                  <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                    {timeLeft.seconds}
-                  </div>
-                  <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                    Seconds
-                  </div>
+                  <Counter
+                    value={timeLeft.seconds}
+                    label="Seconds"
+                    animationType="seconds"
+                    className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                  />
                 </div>
               </div>
             </div>
@@ -321,39 +399,39 @@ export default function Home() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-500/0 group-hover:from-pink-500/20 group-hover:to-red-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeft4Months.days}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Days
-                </div>
+                <Counter
+                  value={timeLeft4Months.days}
+                  label="Days"
+                  animationType="days"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
               <div className="group relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeft4Months.hours}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Hours
-                </div>
+                <Counter
+                  value={timeLeft4Months.hours}
+                  label="Hours"
+                  animationType="hours"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
               <div className="group relative bg-gradient-to-br from-red-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-red-400/30 hover:border-red-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-purple-500/0 group-hover:from-red-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeft4Months.minutes}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Minutes
-                </div>
+                <Counter
+                  value={timeLeft4Months.minutes}
+                  label="Minutes"
+                  animationType="minutes"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-600/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-600/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-600/0 group-hover:from-pink-500/20 group-hover:to-red-600/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeft4Months.seconds}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Seconds
-                </div>
+                <Counter
+                  value={timeLeft4Months.seconds}
+                  label="Seconds"
+                  animationType="seconds"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
             </div>
           </div>
@@ -373,30 +451,30 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-blue-500/30 to-cyan-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-blue-400/30 hover:border-blue-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-cyan-500/0 group-hover:from-blue-500/20 group-hover:to-cyan-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-200 to-cyan-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {Math.floor(timeLeftTrip.days / 7)}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Weeks
-                </div>
+                <Counter
+                  value={Math.floor(timeLeftTrip.days / 7)}
+                  label="Weeks"
+                  animationType="days"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-200 to-cyan-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
               <div className="group relative bg-gradient-to-br from-purple-500/30 to-blue-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/20 group-hover:to-blue-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-blue-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeftTrip.days % 7}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Days
-                </div>
+                <Counter
+                  value={timeLeftTrip.days % 7}
+                  label="Days"
+                  animationType="days"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-blue-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
               <div className="group relative bg-gradient-to-br from-cyan-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-cyan-400/30 hover:border-cyan-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover:from-cyan-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-cyan-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeftTrip.hours}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Hours
-                </div>
+                <Counter
+                  value={timeLeftTrip.hours}
+                  label="Hours"
+                  animationType="hours"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-cyan-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
             </div>
           </div>
@@ -416,30 +494,30 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {Math.floor(timeLeftGoal.days / 30)}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Months
-                </div>
+                <Counter
+                  value={Math.floor(timeLeftGoal.days / 30)}
+                  label="Months"
+                  animationType="days"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-purple-500/0 group-hover:from-pink-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeftGoal.days % 30}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Days
-                </div>
+                <Counter
+                  value={timeLeftGoal.days % 30}
+                  label="Days"
+                  animationType="days"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
               <div className="group relative bg-gradient-to-br from-purple-600/30 to-pink-600/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-600/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-pink-600/0 group-hover:from-purple-600/20 group-hover:to-pink-600/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                  {timeLeftGoal.hours}
-                </div>
-                <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                  Hours
-                </div>
+                <Counter
+                  value={timeLeftGoal.hours}
+                  label="Hours"
+                  animationType="hours"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
               </div>
             </div>
           </div>
