@@ -56,7 +56,6 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
   const [isPhraseLoading, setIsPhraseLoading] = useState(true);
-  const [imageOrder, setImageOrder] = useState<number[]>(images.map((_, index) => index));
   const [showExportMenu, setShowExportMenu] = useState(false);
   const exportMenuRef = useRef<HTMLDivElement>(null);
 
@@ -97,30 +96,6 @@ Created with ❤️ for Juan & Walewska`;
     const text = encodeURIComponent(generateReportText());
     window.open(`https://t.me/share/url?url=${encodeURIComponent('Juan & Walewska Countdown')}&text=${text}`, '_blank');
     setShowExportMenu(false);
-  };
-
-  const moveImageUp = (index: number) => {
-    if (index === 0) return;
-    const newOrder = [...imageOrder];
-    [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
-    setImageOrder(newOrder);
-    if (currentImageIndex === index) {
-      setCurrentImageIndex(index - 1);
-    } else if (currentImageIndex === index - 1) {
-      setCurrentImageIndex(index);
-    }
-  };
-
-  const moveImageDown = (index: number) => {
-    if (index === imageOrder.length - 1) return;
-    const newOrder = [...imageOrder];
-    [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
-    setImageOrder(newOrder);
-    if (currentImageIndex === index) {
-      setCurrentImageIndex(index + 1);
-    } else if (currentImageIndex === index + 1) {
-      setCurrentImageIndex(index);
-    }
   };
 
   const downloadImage = async (imageUrl: string, index: number) => {
@@ -166,11 +141,11 @@ Created with ❤️ for Juan & Walewska`;
 
   useEffect(() => {
     const imageTimer = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % imageOrder.length);
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
     }, 3000);
 
     return () => clearInterval(imageTimer);
-  }, [imageOrder.length]);
+  }, []);
 
   useEffect(() => {
     const updateGetMonths = () => {
@@ -319,26 +294,26 @@ Created with ❤️ for Juan & Walewska`;
             <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl"></div>
 
             <div className="relative h-full rounded-2xl sm:rounded-3xl overflow-hidden">
-              {imageOrder.map((imageIdx, displayIdx) => (
+              {images.map((img, index) => (
                 <div
-                  key={images[imageIdx]}
+                  key={img}
                   className={`absolute inset-0 transition-all duration-1000 ${
-                    displayIdx === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                    index === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
                   }`}
                 >
                   <Image
-                    src={images[imageIdx]}
-                    alt={`Memory ${imageIdx + 1}`}
+                    src={img}
+                    alt={`Memory ${index + 1}`}
                     fill
                     className="object-cover"
-                    priority={displayIdx === 0}
+                    priority={index === 0}
                   />
                 </div>
               ))}
 
               {/* Navigation buttons - Apple Style */}
               <button
-                onClick={() => setCurrentImageIndex((prev) => (prev - 1 + imageOrder.length) % imageOrder.length)}
+                onClick={() => setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)}
                 className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 flex items-center justify-center"
                 aria-label="Previous image"
               >
@@ -348,7 +323,7 @@ Created with ❤️ for Juan & Walewska`;
               </button>
 
               <button
-                onClick={() => setCurrentImageIndex((prev) => (prev + 1) % imageOrder.length)}
+                onClick={() => setCurrentImageIndex((prev) => (prev + 1) % images.length)}
                 className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 flex items-center justify-center"
                 aria-label="Next image"
               >
@@ -359,7 +334,7 @@ Created with ❤️ for Juan & Walewska`;
 
               {/* Download button - Apple Style */}
               <button
-                onClick={() => downloadImage(images[imageOrder[currentImageIndex]], imageOrder[currentImageIndex])}
+                onClick={() => downloadImage(images[currentImageIndex], currentImageIndex)}
                 className="absolute right-2 sm:right-4 top-2 sm:top-4 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 z-10 flex items-center justify-center"
                 aria-label="Download current image"
               >
@@ -368,33 +343,9 @@ Created with ❤️ for Juan & Walewska`;
                 </svg>
               </button>
 
-              {/* Reorder buttons - Apple Style */}
-              <div className="absolute left-2 sm:left-4 top-2 sm:top-4 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
-                <button
-                  onClick={() => moveImageUp(currentImageIndex)}
-                  disabled={currentImageIndex === 0}
-                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
-                  aria-label="Move image up"
-                >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => moveImageDown(currentImageIndex)}
-                  disabled={currentImageIndex === imageOrder.length - 1}
-                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
-                  aria-label="Move image down"
-                >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-              </div>
-
               {/* Image counter dots - Minimalist Apple Style */}
               <div className="absolute bottom-3 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5 sm:gap-2 bg-black/20 backdrop-blur-md px-3 py-2 rounded-full">
-                {imageOrder.map((_, index) => (
+                {images.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
