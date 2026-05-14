@@ -87,21 +87,45 @@ Created with ❤️ for Juan & Walewska`;
     }
   };
 
-  const copyCurrentImageToClipboard = async () => {
+  const copyPageAsPictureToClipboard = async () => {
+    setShowExportMenu(false);
     try {
-      const imageUrl = images[currentImageIndex];
-      const response = await fetch(imageUrl);
-      const inputBlob = await response.blob();
-      const bitmap = await createImageBitmap(inputBlob);
-      const canvas = document.createElement('canvas');
-      canvas.width = bitmap.width;
-      canvas.height = bitmap.height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        throw new Error('Could not get canvas context');
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
+      const root = document.getElementById('page-screenshot-root');
+      if (!root) {
+        throw new Error('page-screenshot-root not found');
       }
-      ctx.drawImage(bitmap, 0, 0);
-      bitmap.close();
+      const { default: html2canvas } = await import('html2canvas');
+      const w = root.scrollWidth;
+      const h = root.scrollHeight;
+      let scale = Math.min(2, window.devicePixelRatio || 1);
+      const maxCanvasSide = 8192;
+      while (w * scale > maxCanvasSide || h * scale > maxCanvasSide) {
+        scale *= 0.75;
+      }
+      const canvas = await html2canvas(root, {
+        useCORS: true,
+        allowTaint: false,
+        logging: false,
+        scale,
+        width: w,
+        height: h,
+        windowWidth: w,
+        windowHeight: h,
+        scrollX: 0,
+        scrollY: 0,
+        backgroundColor: '#030712',
+        onclone: (clonedDoc) => {
+          const cloned = clonedDoc.getElementById('page-screenshot-root');
+          if (cloned) {
+            cloned.style.overflow = 'visible';
+            cloned.style.height = `${h}px`;
+            cloned.style.minHeight = `${h}px`;
+          }
+        },
+      });
       const pngBlob = await new Promise<Blob>((resolve, reject) => {
         canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
       });
@@ -109,9 +133,7 @@ Created with ❤️ for Juan & Walewska`;
         new ClipboardItem({ 'image/png': pngBlob }),
       ]);
     } catch (error) {
-      console.error('Error copying image to clipboard:', error);
-    } finally {
-      setShowExportMenu(false);
+      console.error('Error copying page screenshot to clipboard:', error);
     }
   };
 
@@ -234,7 +256,10 @@ Created with ❤️ for Juan & Walewska`;
   }, [showExportMenu]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden">
+    <div
+      id="page-screenshot-root"
+      className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden"
+    >
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-pink-900/30 to-blue-900/30 animate-gradient"></div>
 
@@ -287,9 +312,9 @@ Created with ❤️ for Juan & Walewska`;
                     </button>
                     <button
                       type="button"
-                      onClick={() => void copyCurrentImageToClipboard()}
+                      onClick={() => void copyPageAsPictureToClipboard()}
                       className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm"
-                      aria-label="Copy visible photo as picture"
+                      aria-label="Copy full page as picture"
                     >
                       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
