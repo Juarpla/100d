@@ -46,7 +46,11 @@ export default function Counter({ value, label, className = '', animationType = 
 
   return (
     <div ref={elementRef} className="relative">
-      <div className={className}>
+      <div
+        className={className}
+        aria-label={`${value} ${label}`}
+        role="img"
+      >
         {value}
       </div>
       <div className="relative text-xs sm:text-sm md:text-base text-white font-medium mt-1 tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
