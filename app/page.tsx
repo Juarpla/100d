@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Counter from "./components/Counter";
+import { jsPDF } from "jspdf";
 
 const images = [
   "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
@@ -105,6 +106,25 @@ Created with ❤️ for Juan & Walewska`;
   const shareViaTelegram = () => {
     const text = encodeURIComponent(generateReportText());
     window.open(`https://t.me/share/url?url=${encodeURIComponent('Juan & Walewska Countdown')}&text=${text}`, '_blank');
+    setShowExportMenu(false);
+  };
+
+  const exportAsPDF = () => {
+    const doc = new jsPDF();
+    const reportText = generateReportText();
+    const lines = reportText.split('\n');
+    doc.setFont("helvetica");
+    doc.setFontSize(12);
+    let yPosition = 20;
+    lines.forEach((line) => {
+      if (yPosition > 270) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      doc.text(line, 20, yPosition);
+      yPosition += 10;
+    });
+    doc.save("juancito-walewska-report.pdf");
     setShowExportMenu(false);
   };
 
@@ -295,6 +315,15 @@ Created with ❤️ for Juan & Walewska`;
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
                       Copy Text
+                    </button>
+                    <button
+                      onClick={exportAsPDF}
+                      className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                      Download PDF
                     </button>
                     <button
                       onClick={shareViaWhatsApp}
