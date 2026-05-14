@@ -1,0 +1,17 @@
+{
+  "name": "J&W - Goals of Love",
+  "short_name": "J&W",
+  "description": "Celebrating Juan & Walewska's Each Months together",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
