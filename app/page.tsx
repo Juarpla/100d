@@ -266,7 +266,7 @@ export default function Home() {
               {/* Navigation buttons - Apple Style */}
               <button
                 onClick={() => setCurrentImageIndex((prev) => (prev - 1 + imageOrder.length) % imageOrder.length)}
-                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 flex items-center justify-center"
                 aria-label="Previous image"
               >
                 <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -276,7 +276,7 @@ export default function Home() {
 
               <button
                 onClick={() => setCurrentImageIndex((prev) => (prev + 1) % imageOrder.length)}
-                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 flex items-center justify-center"
                 aria-label="Next image"
               >
                 <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -287,7 +287,7 @@ export default function Home() {
               {/* Download button - Apple Style */}
               <button
                 onClick={() => downloadImage(images[imageOrder[currentImageIndex]], imageOrder[currentImageIndex])}
-                className="absolute right-2 sm:right-4 top-2 sm:top-4 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 z-10"
+                className="absolute right-2 sm:right-4 top-2 sm:top-4 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg border border-white/20 hover:scale-110 z-10 flex items-center justify-center"
                 aria-label="Download current image"
               >
                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -300,7 +300,7 @@ export default function Home() {
                 <button
                   onClick={() => moveImageUp(currentImageIndex)}
                   disabled={currentImageIndex === 0}
-                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
                   aria-label="Move image up"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -310,7 +310,7 @@ export default function Home() {
                 <button
                   onClick={() => moveImageDown(currentImageIndex)}
                   disabled={currentImageIndex === imageOrder.length - 1}
-                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full p-2 sm:p-3 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center"
                   aria-label="Move image down"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
