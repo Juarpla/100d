@@ -92,8 +92,11 @@ jobs:
           
           for COMMENT_ID in $COMMENT_IDS; do
             [ -z "$COMMENT_ID" ] && continue
-            # Replace the URL pattern in the comment body using jq
+            # Get comment, replace URL, save to temp file, then PATCH
+            TMPFILE=$(mktemp)
             gh api "repos/$REPO/issues/comments/$COMMENT_ID" \
               | jq '{body: (.body | gsub("https://opencode\\.ai/s/"; "https://opncd.ai/share/"))}' \
-              | gh api "repos/$REPO/issues/comments/$COMMENT_ID" -X PATCH --input @- --silent
+              > "$TMPFILE"
+            gh api "repos/$REPO/issues/comments/$COMMENT_ID" -X PATCH --input "$TMPFILE" --silent
+            rm -f "$TMPFILE"
           done
