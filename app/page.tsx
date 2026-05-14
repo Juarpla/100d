@@ -92,12 +92,6 @@ Created with ❤️ for Juan & Walewska`;
     setShowExportMenu(false);
   };
 
-  const shareViaTelegram = () => {
-    const text = encodeURIComponent(generateReportText());
-    window.open(`https://t.me/share/url?url=${encodeURIComponent('Juan & Walewska Countdown')}&text=${text}`, '_blank');
-    setShowExportMenu(false);
-  };
-
   const downloadImage = async (imageUrl: string, index: number) => {
     try {
       const response = await fetch(imageUrl);
