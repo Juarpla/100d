@@ -123,6 +123,60 @@ Created with ❤️ for Juan & Walewska`;
       scale *= 0.75;
     }
 
+    const sanitizeHtml2CanvasColors = (clonedRoot: HTMLElement | null) => {
+      if (!clonedRoot) {
+        return;
+      }
+
+      const elements = [clonedRoot, ...Array.from(clonedRoot.querySelectorAll<HTMLElement>('*'))];
+      const isLightCapture = clonedRoot.classList.contains('theme-light');
+      elements.forEach((element) => {
+        const computed = element.ownerDocument.defaultView?.getComputedStyle(element);
+        if (!computed) {
+          return;
+        }
+
+        const className = typeof element.className === 'string' ? element.className : '';
+        const textFallback = isLightCapture ? 'rgb(59, 16, 33)' : 'rgb(255, 255, 255)';
+        const accentFallback = isLightCapture ? 'rgb(126, 34, 86)' : 'rgb(249, 168, 212)';
+        const borderFallback = isLightCapture ? 'rgba(148, 64, 104, 0.24)' : 'rgba(255, 255, 255, 0.22)';
+        const hasUnsupportedColor = (value: string) => value.includes('okl') || value.includes('lab(');
+
+        if (className.includes('bg-clip-text') || className.includes('text-transparent')) {
+          element.style.backgroundImage = 'none';
+          element.style.color = accentFallback;
+          element.style.webkitTextFillColor = accentFallback;
+        } else {
+          element.style.color = hasUnsupportedColor(computed.color) ? textFallback : computed.color;
+        }
+
+        const safeBorderColor = hasUnsupportedColor(computed.borderColor) ? borderFallback : computed.borderColor;
+        element.style.borderColor = safeBorderColor;
+        element.style.borderTopColor = safeBorderColor;
+        element.style.borderRightColor = safeBorderColor;
+        element.style.borderBottomColor = safeBorderColor;
+        element.style.borderLeftColor = safeBorderColor;
+        element.style.outlineColor = 'rgba(236, 72, 153, 0.8)';
+        element.style.textDecorationColor = 'currentColor';
+        element.style.boxShadow = 'none';
+        element.style.textShadow = 'none';
+        element.style.caretColor = 'auto';
+
+        if (hasUnsupportedColor(computed.backgroundColor)) {
+          element.style.backgroundColor = 'transparent';
+        }
+
+        if (hasUnsupportedColor(computed.backgroundImage)) {
+          element.style.backgroundImage = 'none';
+        }
+
+        if (element instanceof SVGElement) {
+          element.style.fill = 'none';
+          element.style.stroke = 'currentColor';
+        }
+      });
+    };
+
     const canvas = await html2canvas(root, {
       useCORS: true,
       allowTaint: false,
@@ -211,6 +265,8 @@ Created with ❤️ for Juan & Walewska`;
           }
         `;
         clonedDoc.head.appendChild(safeColors);
+        clonedRoot?.classList.add('html2canvas-capture');
+        sanitizeHtml2CanvasColors(clonedRoot);
         [clonedHtml, clonedBody, clonedRoot].forEach((element) => {
           if (!element) {
             return;
@@ -220,7 +276,6 @@ Created with ❤️ for Juan & Walewska`;
           element.style.height = `${h}px`;
           element.style.minHeight = `${h}px`;
         });
-        clonedRoot?.classList.add('html2canvas-capture');
       },
     });
 
