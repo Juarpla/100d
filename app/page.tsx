@@ -69,7 +69,7 @@ export default function Home() {
 
 ⏳ Current Countdowns:
 
-💕 9 Months Together (May 15, 2026): ${timeLeft4Months.days}d ${timeLeft4Months.hours}h ${timeLeft4Months.minutes}m ${timeLeft4Months.seconds}s remaining
+💕 10 Months Together (Jun 15, 2026): ${timeLeft4Months.days}d ${timeLeft4Months.hours}h ${timeLeft4Months.minutes}m ${timeLeft4Months.seconds}s remaining
 
 🌟 1 Year Celebration (Aug 15, 2026): ${Math.floor(timeLeftTrip.days / 7)}w ${timeLeftTrip.days % 7}d ${timeLeftTrip.hours}h remaining
 
@@ -537,7 +537,7 @@ Created with ❤️ for Juan & Walewska`;
               </div>
             </div>
             <p className="text-lg sm:text-xl md:text-2xl text-white font-semibold px-2 animate-fade-in-up drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]" style={{animationDelay: '0.1s'}}>
-              🎉 Almost 9 Beautiful Months Together! 🎉
+              🎉 Almost 1 Beautiful year Together! 🎉
             </p>
             <p className="text-base sm:text-lg text-gray-200 mt-1 sm:mt-2 px-2 animate-fade-in-up drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]" style={{animationDelay: '0.2s'}}>
               Getting closer and closer to our one-year anniversary! ❤️
