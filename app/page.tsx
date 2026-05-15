@@ -87,50 +87,121 @@ Created with ❤️ for Juan & Walewska`;
     }
   };
 
+  const createPageScreenshotBlob = async () => {
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    });
+
+    const root = document.getElementById('page-screenshot-root');
+    if (!root) {
+      throw new Error('page-screenshot-root not found');
+    }
+
+    const { default: html2canvas } = await import('html2canvas');
+    const documentElement = document.documentElement;
+    const body = document.body;
+    const w = Math.max(
+      root.scrollWidth,
+      documentElement.scrollWidth,
+      documentElement.offsetWidth,
+      body.scrollWidth,
+      window.innerWidth
+    );
+    const h = Math.max(
+      root.scrollHeight,
+      documentElement.scrollHeight,
+      documentElement.offsetHeight,
+      body.scrollHeight,
+      window.innerHeight
+    );
+    let scale = Math.min(2, window.devicePixelRatio || 1);
+    const maxCanvasSide = 8192;
+    while (w * scale > maxCanvasSide || h * scale > maxCanvasSide) {
+      scale *= 0.75;
+    }
+
+    const canvas = await html2canvas(root, {
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      scale,
+      width: w,
+      height: h,
+      windowWidth: w,
+      windowHeight: h,
+      scrollX: 0,
+      scrollY: 0,
+      backgroundColor: '#030712',
+      onclone: (clonedDoc) => {
+        const clonedRoot = clonedDoc.getElementById('page-screenshot-root');
+        const clonedHtml = clonedDoc.documentElement;
+        const clonedBody = clonedDoc.body;
+        const safeColors = clonedDoc.createElement('style');
+        safeColors.textContent = `
+          #page-screenshot-root.html2canvas-capture,
+          #page-screenshot-root.html2canvas-capture * {
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            box-shadow: none !important;
+            color: rgb(255, 255, 255) !important;
+            text-shadow: none !important;
+          }
+          #page-screenshot-root.html2canvas-capture {
+            background: linear-gradient(135deg, rgb(3, 7, 18), rgb(17, 24, 39), rgb(0, 0, 0)) !important;
+          }
+          #page-screenshot-root.html2canvas-capture [class*="bg-white/"] {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+          }
+          #page-screenshot-root.html2canvas-capture [class*="bg-black/"] {
+            background-color: rgba(0, 0, 0, 0.24) !important;
+          }
+          #page-screenshot-root.html2canvas-capture [class*="bg-gradient-to-"] {
+            background-image: linear-gradient(135deg, rgba(236, 72, 153, 0.34), rgba(99, 102, 241, 0.34)) !important;
+          }
+          #page-screenshot-root.html2canvas-capture [class*="bg-clip-text"] {
+            background-image: none !important;
+            color: rgb(249, 168, 212) !important;
+            -webkit-text-fill-color: rgb(249, 168, 212) !important;
+          }
+          #page-screenshot-root.html2canvas-capture [class*="text-gray"] {
+            color: rgb(229, 231, 235) !important;
+          }
+        `;
+        clonedDoc.head.appendChild(safeColors);
+        [clonedHtml, clonedBody, clonedRoot].forEach((element) => {
+          if (!element) {
+            return;
+          }
+          element.style.overflow = 'visible';
+          element.style.width = `${w}px`;
+          element.style.height = `${h}px`;
+          element.style.minHeight = `${h}px`;
+        });
+        clonedRoot?.classList.add('html2canvas-capture');
+      },
+    });
+
+    return new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error('toBlob failed'));
+        }
+      }, 'image/png');
+    });
+  };
+
   const copyPageAsPictureToClipboard = async () => {
     setShowExportMenu(false);
     try {
-      await new Promise<void>((resolve) => {
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-      });
-      const root = document.getElementById('page-screenshot-root');
-      if (!root) {
-        throw new Error('page-screenshot-root not found');
+      if (!navigator.clipboard?.write || typeof ClipboardItem === 'undefined') {
+        throw new Error('Image clipboard copy is not supported in this browser');
       }
-      const { default: html2canvas } = await import('html2canvas');
-      const w = root.scrollWidth;
-      const h = root.scrollHeight;
-      let scale = Math.min(2, window.devicePixelRatio || 1);
-      const maxCanvasSide = 8192;
-      while (w * scale > maxCanvasSide || h * scale > maxCanvasSide) {
-        scale *= 0.75;
-      }
-      const canvas = await html2canvas(root, {
-        useCORS: true,
-        allowTaint: false,
-        logging: false,
-        scale,
-        width: w,
-        height: h,
-        windowWidth: w,
-        windowHeight: h,
-        scrollX: 0,
-        scrollY: 0,
-        backgroundColor: '#030712',
-        onclone: (clonedDoc) => {
-          const cloned = clonedDoc.getElementById('page-screenshot-root');
-          if (cloned) {
-            cloned.style.overflow = 'visible';
-            cloned.style.height = `${h}px`;
-            cloned.style.minHeight = `${h}px`;
-          }
-        },
-      });
-      const pngBlob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
-      });
+
+      const screenshotBlob = createPageScreenshotBlob();
+      screenshotBlob.catch(() => undefined);
       await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': pngBlob }),
+        new ClipboardItem({ 'image/png': screenshotBlob }),
       ]);
     } catch (error) {
       console.error('Error copying page screenshot to clipboard:', error);
