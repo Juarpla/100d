@@ -4,10 +4,9 @@ export async function GET() {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-        return NextResponse.json(
-            { error: 'Gemini API key not configured' },
-            { status: 500 }
-        );
+        return NextResponse.json({
+            phrase: "Every moment with you is a treasure. Here are some of the first moments we spent together."
+        });
     }
 
     try {

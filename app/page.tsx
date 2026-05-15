@@ -57,6 +57,8 @@ export default function Home() {
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
   const [isPhraseLoading, setIsPhraseLoading] = useState(true);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [copyPictureStatus, setCopyPictureStatus] = useState('');
   const exportMenuRef = useRef<HTMLDivElement>(null);
 
   const generateReportText = () => {
@@ -96,6 +98,7 @@ Created with ❤️ for Juan & Walewska`;
     if (!root) {
       throw new Error('page-screenshot-root not found');
     }
+    await document.fonts?.ready;
 
     const { default: html2canvas } = await import('html2canvas');
     const documentElement = document.documentElement;
@@ -140,16 +143,31 @@ Created with ❤️ for Juan & Walewska`;
         safeColors.textContent = `
           #page-screenshot-root.html2canvas-capture,
           #page-screenshot-root.html2canvas-capture * {
-            border-color: rgba(255, 255, 255, 0.22) !important;
-            box-shadow: none !important;
-            color: rgb(255, 255, 255) !important;
             text-shadow: none !important;
           }
           #page-screenshot-root.html2canvas-capture {
             background: linear-gradient(135deg, rgb(3, 7, 18), rgb(17, 24, 39), rgb(0, 0, 0)) !important;
           }
+          #page-screenshot-root.theme-light.html2canvas-capture {
+            background: linear-gradient(135deg, rgb(255, 247, 251), rgb(239, 246, 255), rgb(250, 245, 255)) !important;
+          }
+          #page-screenshot-root.html2canvas-capture .animate-fade-in-up,
+          #page-screenshot-root.html2canvas-capture .animate-pulse-gentle,
+          #page-screenshot-root.html2canvas-capture .animate-pulse-slow,
+          #page-screenshot-root.html2canvas-capture .animate-gradient,
+          #page-screenshot-root.html2canvas-capture .animate-float-slow,
+          #page-screenshot-root.html2canvas-capture .animate-float-reverse,
+          #page-screenshot-root.html2canvas-capture .animate-float-gentle,
+          #page-screenshot-root.html2canvas-capture .animate-float-gentle-reverse {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+          }
           #page-screenshot-root.html2canvas-capture [class*="bg-white/"] {
             background-color: rgba(255, 255, 255, 0.12) !important;
+          }
+          #page-screenshot-root.theme-light.html2canvas-capture [class*="bg-white/"] {
+            background-color: rgba(255, 255, 255, 0.86) !important;
           }
           #page-screenshot-root.html2canvas-capture [class*="bg-black/"] {
             background-color: rgba(0, 0, 0, 0.24) !important;
@@ -162,8 +180,34 @@ Created with ❤️ for Juan & Walewska`;
             color: rgb(249, 168, 212) !important;
             -webkit-text-fill-color: rgb(249, 168, 212) !important;
           }
+          #page-screenshot-root.theme-light.html2canvas-capture [class*="bg-clip-text"],
+          #page-screenshot-root.theme-light.html2canvas-capture [class*="text-transparent"] {
+            background-image: none !important;
+            color: rgb(126, 34, 86) !important;
+            -webkit-text-fill-color: rgb(126, 34, 86) !important;
+          }
+          #page-screenshot-root.html2canvas-capture [class*="text-white"] {
+            color: rgb(255, 255, 255) !important;
+          }
+          #page-screenshot-root.theme-light.html2canvas-capture [class*="text-white"] {
+            color: rgb(59, 16, 33) !important;
+          }
           #page-screenshot-root.html2canvas-capture [class*="text-gray"] {
             color: rgb(229, 231, 235) !important;
+          }
+          #page-screenshot-root.theme-light.html2canvas-capture [class*="text-gray"] {
+            color: rgb(71, 85, 105) !important;
+          }
+          #page-screenshot-root.html2canvas-capture img {
+            filter: none !important;
+          }
+          #page-screenshot-root.html2canvas-capture [data-visible-memory="true"] {
+            display: block !important;
+            opacity: 1 !important;
+            transform: none !important;
+          }
+          #page-screenshot-root.html2canvas-capture [data-visible-memory="false"] {
+            display: none !important;
           }
         `;
         clonedDoc.head.appendChild(safeColors);
@@ -192,7 +236,7 @@ Created with ❤️ for Juan & Walewska`;
   };
 
   const copyPageAsPictureToClipboard = async () => {
-    setShowExportMenu(false);
+    setCopyPictureStatus('Preparing picture...');
     try {
       if (!navigator.clipboard?.write || typeof ClipboardItem === 'undefined') {
         throw new Error('Image clipboard copy is not supported in this browser');
@@ -203,8 +247,29 @@ Created with ❤️ for Juan & Walewska`;
       await navigator.clipboard.write([
         new ClipboardItem({ 'image/png': screenshotBlob }),
       ]);
+      setCopyPictureStatus('Picture copied.');
+      setShowExportMenu(false);
     } catch (error) {
-      console.error('Error copying page screenshot to clipboard:', error);
+      if (!(error instanceof DOMException && error.name === 'NotAllowedError')) {
+        console.warn('Image clipboard copy was blocked. Downloading the screenshot instead:', error);
+      }
+      try {
+        const blob = await createPageScreenshotBlob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'juan-walewska-page.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        setCopyPictureStatus('Clipboard was blocked, so the picture was downloaded.');
+      } catch (downloadError) {
+        console.error('Error creating page screenshot:', downloadError);
+        setCopyPictureStatus('Could not create the picture.');
+      }
+    } finally {
+      window.setTimeout(() => setCopyPictureStatus(''), 3500);
     }
   };
 
@@ -311,6 +376,10 @@ Created with ❤️ for Juan & Walewska`;
   }, []);
 
   useEffect(() => {
+    setIsDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }, []);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
         setShowExportMenu(false);
@@ -329,7 +398,7 @@ Created with ❤️ for Juan & Walewska`;
   return (
     <div
       id="page-screenshot-root"
-      className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden"
+      className={`love-page ${isDarkMode ? 'theme-dark' : 'theme-light'} min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden`}
     >
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-pink-900/30 to-blue-900/30 animate-gradient"></div>
@@ -359,10 +428,21 @@ Created with ❤️ for Juan & Walewska`;
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300 bg-clip-text text-transparent px-2 tracking-tight hover:scale-105 transition-transform duration-500 drop-shadow-[0_0_20px_rgba(236,72,153,0.3)]">
                 Juan & Walewska
               </h1>
+              <button
+                type="button"
+                onClick={() => setIsDarkMode((current) => !current)}
+                className="theme-toggle bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 flex items-center justify-center"
+                aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                title={isDarkMode ? 'Light mode' : 'Dark mode'}
+              >
+                <span aria-hidden="true" className="text-base sm:text-lg">
+                  {isDarkMode ? '☀️' : '🌙'}
+                </span>
+              </button>
               <div className="relative" ref={exportMenuRef}>
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 flex items-center justify-center"
+                  className="share-button bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 shadow-lg border border-white/20 hover:scale-110 transition-all duration-300 flex items-center justify-center"
                   aria-label="Export report"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -370,11 +450,11 @@ Created with ❤️ for Juan & Walewska`;
                   </svg>
                 </button>
                 {showExportMenu && (
-                  <div className="absolute right-0 mt-2 bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-xl border border-white/20 overflow-hidden z-50 min-w-[200px]">
+                  <div className="export-menu absolute right-0 mt-2 bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-xl border border-white/20 overflow-hidden z-50 min-w-[200px]">
                     <button
                       type="button"
                       onClick={() => void copyReportToClipboard()}
-                      className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm"
+                      className="export-menu-item w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -384,7 +464,7 @@ Created with ❤️ for Juan & Walewska`;
                     <button
                       type="button"
                       onClick={() => void copyPageAsPictureToClipboard()}
-                      className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm"
+                      className="export-menu-item w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-2 text-sm"
                       aria-label="Copy full page as picture"
                     >
                       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -392,6 +472,11 @@ Created with ❤️ for Juan & Walewska`;
                       </svg>
                       Copy as Picture
                     </button>
+                    {copyPictureStatus && (
+                      <p className="px-4 py-2 text-xs text-gray-300 export-menu-status">
+                        {copyPictureStatus}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -413,6 +498,7 @@ Created with ❤️ for Juan & Walewska`;
               {images.map((img, index) => (
                 <div
                   key={img}
+                  data-visible-memory={index === currentImageIndex ? 'true' : 'false'}
                   className={`absolute inset-0 transition-all duration-1000 ${
                     index === currentImageIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
                   }`}
@@ -421,8 +507,10 @@ Created with ❤️ for Juan & Walewska`;
                     src={img}
                     alt={`Memory ${index + 1}`}
                     fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 896px, 896px"
                     className="object-cover"
-                    priority={index === 0}
+                    priority={index < 3}
+                    loading={index < 3 ? 'eager' : 'lazy'}
                   />
                 </div>
               ))}
