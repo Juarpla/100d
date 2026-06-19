@@ -10,7 +10,7 @@ permissions:
   id-token: write
 
 env:
-  MODEL: ${{ vars.MODEL || 'opencode/minimax-m2.5-free' }}
+  MODEL: ${{ vars.MODEL || 'opencode/mimo-v2.5-free' }}
 
 jobs:
   opencode:
