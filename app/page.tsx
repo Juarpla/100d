@@ -77,7 +77,7 @@ export default function Home() {
 
 ⏳ Current Countdowns:
 
-💕 10 Months Together (Jun 15, 2026): ${timeLeft4Months.days}d ${timeLeft4Months.hours}h ${timeLeft4Months.minutes}m ${timeLeft4Months.seconds}s remaining
+💕 11 Months Together (July 15, 2026): ${timeLeft4Months.days}d ${timeLeft4Months.hours}h ${timeLeft4Months.minutes}m ${timeLeft4Months.seconds}s remaining
 
 🌟 1 Year Celebration (Aug 15, 2026): ${Math.floor(timeLeftTrip.days / 7)}w ${timeLeftTrip.days % 7}d ${timeLeftTrip.hours}h remaining
 
@@ -389,7 +389,7 @@ Created with ❤️ for Juan & Walewska`;
 
   useEffect(() => {
     const updateGetMonths = () => {
-      setTimeLeft4Months(calculateTimeLeft('2026-06-15T00:00:00'));
+      setTimeLeft4Months(calculateTimeLeft('2026-07-15T00:00:00'));
     };
 
     updateGetMonths();
@@ -654,10 +654,10 @@ Created with ❤️ for Juan & Walewska`;
             <div className="grow h-px bg-gradient-to-r from-transparent via-pink-400/70 to-transparent"></div>
           </div>
 
-          {/* Countdown to 8 Months - Apple Style */}
+          {/* Countdown to 11 Months - Apple Style */}
           <div className="text-center mb-4 sm:mb-6 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6 px-2 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Countdown to Jun 15th - Celebrating 10 Months of Dating
+              Countdown to July 15th - Celebrating 11 Months of Dating
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
