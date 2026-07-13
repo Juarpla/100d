@@ -57,6 +57,14 @@ export default function Home() {
     isComplete: false
   });
 
+  const [timeLeftFirstChat, setTimeLeftFirstChat] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isComplete: false
+  });
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lovePhrase, setLovePhrase] = useState("Every moment with you is a treasure. Here are some of the first moments we spent together.");
   const [isPhraseLoading, setIsPhraseLoading] = useState(true);
@@ -78,6 +86,8 @@ export default function Home() {
 🌟 1 Year Celebration (Aug 15, 2026): ${Math.floor(timeLeftTrip.days / 7)}w ${timeLeftTrip.days % 7}d ${timeLeftTrip.hours}h remaining
 
 💖 First Meet Anniversary (May 31): ${Math.floor(timeLeftFirstMeet.days / 30)}m ${timeLeftFirstMeet.days % 30}d ${timeLeftFirstMeet.hours}h remaining
+
+💬 First Chat Anniversary (July 13): ${Math.floor(timeLeftFirstChat.days / 30)}m ${timeLeftFirstChat.days % 30}d ${timeLeftFirstChat.hours}h remaining
 
 👑 Sacred Goal (Mar 20, 2027): ${Math.floor(timeLeftGoal.days / 30)}m ${timeLeftGoal.days % 30}d ${timeLeftGoal.hours}h remaining
 
@@ -429,6 +439,23 @@ Created with ❤️ for Juan & Walewska`;
 
     updateFirstMeet();
     const timer = setInterval(updateFirstMeet, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const updateFirstChat = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      let targetDate = new Date(`${year}-07-13T00:00:00`);
+      if (now > targetDate) {
+        targetDate = new Date(`${year + 1}-07-13T00:00:00`);
+      }
+      setTimeLeftFirstChat(calculateTimeLeft(targetDate.toISOString()));
+    };
+
+    updateFirstChat();
+    const timer = setInterval(updateFirstChat, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -824,8 +851,51 @@ Created with ❤️ for Juan & Walewska`;
             </div>
           </div>
 
+          {/* Separator - First Chat Anniversary */}
+          <div className="flex items-center justify-center my-6 sm:my-8 md:my-10 animate-fade-in-up" style={{animationDelay: '1.55s'}}>
+            <div className="grow h-px bg-gradient-to-r from-transparent via-cyan-400/70 to-transparent"></div>
+            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl animate-pulse-gentle drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">💬💖</div>
+            <div className="grow h-px bg-gradient-to-r from-transparent via-cyan-400/70 to-transparent"></div>
+          </div>
+
+          {/* First Chat Anniversary - Apple Style */}
+          <div className="text-center mb-4 sm:mb-6 animate-fade-in-up" style={{animationDelay: '1.6s'}}>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6 px-2 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+              First Chat Anniversary
+            </h2>
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+              <div className="group relative bg-gradient-to-br from-cyan-500/30 to-blue-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-cyan-400/30 hover:border-cyan-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/30">
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/20 group-hover:to-blue-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
+                <Counter
+                  value={Math.floor(timeLeftFirstChat.days / 30)}
+                  label="Months"
+                  animationType="days"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-cyan-200 to-blue-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
+              </div>
+              <div className="group relative bg-gradient-to-br from-blue-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-blue-400/30 hover:border-blue-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-pink-500/0 group-hover:from-blue-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
+                <Counter
+                  value={timeLeftFirstChat.days % 30}
+                  label="Days"
+                  animationType="days"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
+              </div>
+              <div className="group relative bg-gradient-to-br from-pink-500/30 to-cyan-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-cyan-500/0 group-hover:from-pink-500/20 group-hover:to-cyan-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
+                <Counter
+                  value={timeLeftFirstChat.hours}
+                  label="Hours"
+                  animationType="hours"
+                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-cyan-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Love message - Apple Glassmorphism */}
-          <div className="text-center mt-4 sm:mt-6 md:mt-8 p-4 sm:p-5 md:p-6 bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl hover:bg-white/[0.15] transition-all duration-700 animate-fade-in-up" style={{animationDelay: '1.3s'}}>
+          <div className="text-center mt-4 sm:mt-6 md:mt-8 p-4 sm:p-5 md:p-6 bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl hover:bg-white/[0.15] transition-all duration-700 animate-fade-in-up" style={{animationDelay: '1.75s'}}>
             {isPhraseLoading ? (
               <p className="text-base sm:text-lg md:text-xl text-gray-300 italic leading-relaxed animate-pulse-gentle drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                 Loading inspiration...
