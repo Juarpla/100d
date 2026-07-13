@@ -6,26 +6,22 @@ import Counter from "./components/Counter";
 
 const images = [
   "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
-  "/love/WhatsApp Image 2025-11-14 at 17.45.19 (1).jpeg",
   "/love/WhatsApp Image 2025-11-14 at 17.45.19 (2).jpeg",
-  "/love/WhatsApp Image 2025-12-09 at 00.41.54.jpeg",
   "/love/WhatsApp Image 2025-12-11 at 18.39.13.jpeg",
-  "/love/WhatsApp Image 2025-12-18 at 17.01.31.jpeg",
   "/love/WhatsApp Image 2025-12-19 at 15.28.37.jpeg",
   "/love/WhatsApp Image 2025-12-21 at 10.16.37.jpeg",
-  "/love/WhatsApp Image 2025-12-30 at 01.25.27.jpeg",
   "/love/WhatsApp Image 2026-01-04 at 16.34.37.jpeg",
   "/love/WhatsApp Image 2026-02-24 at 22.19.43.jpg",
-  "/love/WhatsApp Image 2026-03-01 at 19.34.03.jpeg",
-  "/love/WhatsApp Image 2026-03-04 at 00.57.56.jpeg",
   "/love/WhatsApp Image 2026-03-06 at 01.02.48 (1).jpg",
   "/love/WhatsApp Image 2026-03-06 at 01.02.48.jpg",
   "/love/WhatsApp Image 2026-03-17 at 00.45.58.jpeg",
-  "/love/WhatsApp Image 2026-03-17 at 00.53.04.jpeg",
   "/love/Gemini_Generated_Image_2aq19h2aq19h2aq1.png",
   "/love/WhatsApp Image 2026-03-26 at 23.44.43.jpg",
   "/love/WhatsApp Image 2026-04-05 at 21.44.13.jpg",
-  "/love/WhatsApp Image 2026-04-15 at 23.19.04.jpeg"
+  "/love/WhatsApp Image 2026-06-07 at 01.34.26.jpeg",
+  "/love/WhatsApp Image 2026-06-16 at 01.12.09.jpeg",
+  "/love/WhatsApp Image 2026-06-29 at 02.22.20.jpeg",
+  "/love/WhatsApp Image 2026-07-10 at 18.34.27.jpeg"
 ];
 
 export default function Home() {
