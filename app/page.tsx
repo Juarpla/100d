@@ -25,15 +25,7 @@ const images = [
 ];
 
 export default function Home() {
-  const [timeLeft4Months, setTimeLeft4Months] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    isComplete: false
-  });
-
-  const [timeLeftTrip, setTimeLeftTrip] = useState({
+  const [timeLeftDatingAnniversary, setTimeLeftDatingAnniversary] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
@@ -89,11 +81,9 @@ export default function Home() {
 
 ⏳ Current Countdowns:
 
-💕 11 Months Together (July 15, 2026): ${timeLeft4Months.days}d ${timeLeft4Months.hours}h ${timeLeft4Months.minutes}m ${timeLeft4Months.seconds}s remaining
+💕 1 Year Together (August 15, 2026): ${timeLeftDatingAnniversary.days}d ${timeLeftDatingAnniversary.hours}h ${timeLeftDatingAnniversary.minutes}m ${timeLeftDatingAnniversary.seconds}s remaining
 
 🏖️ Pimentel Beach Trip (July 27, 2026): ${Math.floor(timeLeftPimentelTrip.days / 30)}m ${timeLeftPimentelTrip.days % 30}d ${timeLeftPimentelTrip.hours}h remaining
-
-🌟 1 Year Celebration (Aug 15, 2026): ${Math.floor(timeLeftTrip.days / 7)}w ${timeLeftTrip.days % 7}d ${timeLeftTrip.hours}h remaining
 
 💖 First Meet Anniversary (May 31): ${Math.floor(timeLeftFirstMeet.days / 30)}m ${timeLeftFirstMeet.days % 30}d ${timeLeftFirstMeet.hours}h remaining
 
@@ -404,12 +394,12 @@ Created with ❤️ for Juan & Walewska`;
   }, []);
 
   useEffect(() => {
-    const updateGetMonths = () => {
-      setTimeLeft4Months(calculateTimeLeft('2026-07-15T00:00:00'));
+    const updateDatingAnniversary = () => {
+      setTimeLeftDatingAnniversary(calculateTimeLeft('2026-08-15T00:00:00'));
     };
 
-    updateGetMonths();
-    const timer = setInterval(updateGetMonths, 1000);
+    updateDatingAnniversary();
+    const timer = setInterval(updateDatingAnniversary, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -421,17 +411,6 @@ Created with ❤️ for Juan & Walewska`;
 
     updatePimentelTrip();
     const timer = setInterval(updatePimentelTrip, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const updateTrip = () => {
-      setTimeLeftTrip(calculateTimeLeft('2026-08-15T00:00:00'));
-    };
-
-    updateTrip();
-    const timer = setInterval(updateTrip, 1000);
 
     return () => clearInterval(timer);
   }, []);
@@ -698,16 +677,16 @@ Created with ❤️ for Juan & Walewska`;
             <div className="grow h-px bg-gradient-to-r from-transparent via-pink-400/70 to-transparent"></div>
           </div>
 
-          {/* Countdown to 11 Months - Apple Style */}
+          {/* Countdown to 1 Year - Apple Style */}
           <div className="text-center mb-4 sm:mb-6 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6 px-2 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Countdown to July 15th - Celebrating 11 Months of Dating
+              Countdown to August 15th - Celebrating 1 Year of Dating
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-500/0 group-hover:from-pink-500/20 group-hover:to-red-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
                 <Counter
-                  value={timeLeft4Months.days}
+                  value={timeLeftDatingAnniversary.days}
                   label="Days"
                   animationType="days"
                   className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
@@ -716,7 +695,7 @@ Created with ❤️ for Juan & Walewska`;
               <div className="group relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-pink-500/0 group-hover:from-purple-500/20 group-hover:to-pink-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
                 <Counter
-                  value={timeLeft4Months.hours}
+                  value={timeLeftDatingAnniversary.hours}
                   label="Hours"
                   animationType="hours"
                   className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
@@ -725,7 +704,7 @@ Created with ❤️ for Juan & Walewska`;
               <div className="group relative bg-gradient-to-br from-red-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-red-400/30 hover:border-red-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-purple-500/0 group-hover:from-red-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
                 <Counter
-                  value={timeLeft4Months.minutes}
+                  value={timeLeftDatingAnniversary.minutes}
                   label="Minutes"
                   animationType="minutes"
                   className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-red-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
@@ -734,7 +713,7 @@ Created with ❤️ for Juan & Walewska`;
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-600/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-600/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-red-600/0 group-hover:from-pink-500/20 group-hover:to-red-600/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
                 <Counter
-                  value={timeLeft4Months.seconds}
+                  value={timeLeftDatingAnniversary.seconds}
                   label="Seconds"
                   animationType="seconds"
                   className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
@@ -781,49 +760,6 @@ Created with ❤️ for Juan & Walewska`;
                   label="Hours"
                   animationType="hours"
                   className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-teal-200 to-amber-100 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Separator - Trip */}
-          <div className="flex items-center justify-center my-6 sm:my-8 md:my-10 animate-fade-in-up" style={{animationDelay: '0.9s'}}>
-            <div className="grow h-px bg-gradient-to-r from-transparent via-blue-400/70 to-transparent"></div>
-            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl animate-pulse-gentle drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">🎉</div>
-            <div className="grow h-px bg-gradient-to-r from-transparent via-blue-400/70 to-transparent"></div>
-          </div>
-
-          {/* Countdown to Trip - Apple Style */}
-          <div className="text-center mb-4 sm:mb-6 animate-fade-in-up" style={{animationDelay: '1s'}}>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6 px-2 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Countdown to celebrate 1 year of dating
-            </h2>
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
-              <div className="group relative bg-gradient-to-br from-blue-500/30 to-cyan-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-blue-400/30 hover:border-blue-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-cyan-500/0 group-hover:from-blue-500/20 group-hover:to-cyan-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <Counter
-                  value={Math.floor(timeLeftTrip.days / 7)}
-                  label="Weeks"
-                  animationType="days"
-                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-200 to-cyan-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                />
-              </div>
-              <div className="group relative bg-gradient-to-br from-purple-500/30 to-blue-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-purple-400/30 hover:border-purple-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/20 group-hover:to-blue-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <Counter
-                  value={timeLeftTrip.days % 7}
-                  label="Days"
-                  animationType="days"
-                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-purple-200 to-blue-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                />
-              </div>
-              <div className="group relative bg-gradient-to-br from-cyan-500/30 to-purple-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-cyan-400/30 hover:border-cyan-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover:from-cyan-500/20 group-hover:to-purple-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <Counter
-                  value={timeLeftTrip.hours}
-                  label="Hours"
-                  animationType="hours"
-                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-cyan-200 to-purple-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
                 />
               </div>
             </div>
