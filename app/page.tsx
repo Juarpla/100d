@@ -33,14 +33,6 @@ export default function Home() {
     isComplete: false
   });
 
-  const [timeLeftPimentelTrip, setTimeLeftPimentelTrip] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    isComplete: false
-  });
-
   const [timeLeftGoal, setTimeLeftGoal] = useState({
     days: 0,
     hours: 0,
@@ -82,8 +74,6 @@ export default function Home() {
 ⏳ Current Countdowns:
 
 💕 1 Year Together (August 15, 2026): ${timeLeftDatingAnniversary.days}d ${timeLeftDatingAnniversary.hours}h ${timeLeftDatingAnniversary.minutes}m ${timeLeftDatingAnniversary.seconds}s remaining
-
-🏖️ Pimentel Beach Trip (July 27, 2026): ${Math.floor(timeLeftPimentelTrip.days / 30)}m ${timeLeftPimentelTrip.days % 30}d ${timeLeftPimentelTrip.hours}h remaining
 
 💖 First Meet Anniversary (May 31): ${Math.floor(timeLeftFirstMeet.days / 30)}m ${timeLeftFirstMeet.days % 30}d ${timeLeftFirstMeet.hours}h remaining
 
@@ -405,17 +395,6 @@ Created with ❤️ for Juan & Walewska`;
   }, []);
 
   useEffect(() => {
-    const updatePimentelTrip = () => {
-      setTimeLeftPimentelTrip(calculateTimeLeft('2026-07-27T00:00:00'));
-    };
-
-    updatePimentelTrip();
-    const timer = setInterval(updatePimentelTrip, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
     const updateGetGoal = () => {
       setTimeLeftGoal(calculateTimeLeft('2027-03-20T00:00:00'));
     };
@@ -717,49 +696,6 @@ Created with ❤️ for Juan & Walewska`;
                   label="Seconds"
                   animationType="seconds"
                   className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-pink-200 to-red-300 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Separator - Pimentel Beach Trip */}
-          <div className="flex items-center justify-center my-6 sm:my-8 md:my-10 animate-fade-in-up" style={{animationDelay: '0.7s'}}>
-            <div className="grow h-px bg-gradient-to-r from-transparent via-cyan-400/70 to-transparent"></div>
-            <div className="mx-4 text-2xl sm:text-3xl md:text-4xl animate-pulse-gentle drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">🏖️</div>
-            <div className="grow h-px bg-gradient-to-r from-transparent via-amber-300/70 to-transparent"></div>
-          </div>
-
-          {/* Pimentel Beach Trip - Apple Style */}
-          <div className="text-center mb-4 sm:mb-6 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6 px-2 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Countdown to Pimentel Beach Trip
-            </h2>
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
-              <div className="group relative bg-gradient-to-br from-cyan-500/30 to-teal-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-cyan-400/30 hover:border-cyan-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-teal-500/0 group-hover:from-cyan-500/20 group-hover:to-teal-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <Counter
-                  value={Math.floor(timeLeftPimentelTrip.days / 30)}
-                  label="Months"
-                  animationType="days"
-                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-cyan-200 to-teal-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                />
-              </div>
-              <div className="group relative bg-gradient-to-br from-amber-400/30 to-cyan-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-amber-300/30 hover:border-amber-300/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-amber-400/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-400/0 to-cyan-500/0 group-hover:from-amber-400/20 group-hover:to-cyan-500/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <Counter
-                  value={timeLeftPimentelTrip.days % 30}
-                  label="Days"
-                  animationType="days"
-                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-amber-100 to-cyan-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                />
-              </div>
-              <div className="group relative bg-gradient-to-br from-teal-500/30 to-amber-400/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-teal-400/30 hover:border-teal-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/30">
-                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/0 to-amber-400/0 group-hover:from-teal-500/20 group-hover:to-amber-400/20 rounded-2xl sm:rounded-3xl transition-all duration-500"></div>
-                <Counter
-                  value={timeLeftPimentelTrip.hours}
-                  label="Hours"
-                  animationType="hours"
-                  className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-teal-200 to-amber-100 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
                 />
               </div>
             </div>
