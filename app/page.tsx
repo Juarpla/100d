@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import Counter from "./components/Counter";
 
 const images = [
+  "/love/juan-walewska-memories-collage.jpg",
   "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
   "/love/WhatsApp Image 2025-11-14 at 17.45.19 (2).jpeg",
   "/love/WhatsApp Image 2025-12-11 at 18.39.13.jpeg",
@@ -341,7 +342,9 @@ Created with ❤️ for Juan & Walewska`;
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `memory-${index + 1}${imageUrl.split('.').pop()}`;
+      const extension = imageUrl.split('.').pop() ?? 'jpg';
+      const filename = index === 0 ? 'juan-walewska-memories-collage' : `memory-${index}`;
+      link.download = `${filename}.${extension}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -589,7 +592,7 @@ Created with ❤️ for Juan & Walewska`;
                 >
                   <Image
                     src={img}
-                    alt={`Memory ${index + 1}`}
+                    alt={index === 0 ? 'Collage of Juan and Walewska memories' : `Memory ${index}`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 896px, 896px"
                     className="object-cover"
