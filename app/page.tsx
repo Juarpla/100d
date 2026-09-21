@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 import Counter from "./components/Counter";
+import { getNextDatingAnniversary } from "./utils/datingAnniversary";
 
 const images = [
   "/love/WhatsApp Image 2025-11-14 at 17.38.08.jpeg",
@@ -25,6 +26,7 @@ const images = [
 ];
 
 export default function Home() {
+  const [datingAnniversary, setDatingAnniversary] = useState(() => getNextDatingAnniversary());
   const [timeLeftDatingAnniversary, setTimeLeftDatingAnniversary] = useState({
     days: 0,
     hours: 0,
@@ -67,13 +69,18 @@ export default function Home() {
 
   const generateReportText = () => {
     const now = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const targetDate = datingAnniversary.targetDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
     return `💑 Juan & Walewska - Our Journey Together 💑
 
 📅 Report Date: ${now}
 
 ⏳ Current Countdowns:
 
-💕 13 Months Together (September 15, 2026): ${timeLeftDatingAnniversary.days}d ${timeLeftDatingAnniversary.hours}h ${timeLeftDatingAnniversary.minutes}m ${timeLeftDatingAnniversary.seconds}s remaining
+💕 ${datingAnniversary.monthsTogether} Months Together (${targetDate}): ${timeLeftDatingAnniversary.days}d ${timeLeftDatingAnniversary.hours}h ${timeLeftDatingAnniversary.minutes}m ${timeLeftDatingAnniversary.seconds}s remaining
 
 💖 First Meet Anniversary (May 31): ${Math.floor(timeLeftFirstMeet.days / 30)}m ${timeLeftFirstMeet.days % 30}d ${timeLeftFirstMeet.hours}h remaining
 
@@ -351,8 +358,8 @@ Created with ❤️ for Juan & Walewska`;
     }
   };
 
-  const calculateTimeLeft = (targetDate: string) => {
-    const target = new Date(targetDate).getTime();
+  const calculateTimeLeft = (targetDate: Date | string) => {
+    const target = targetDate instanceof Date ? targetDate.getTime() : new Date(targetDate).getTime();
     const now = new Date().getTime();
     const difference = target - now;
 
@@ -385,7 +392,9 @@ Created with ❤️ for Juan & Walewska`;
 
   useEffect(() => {
     const updateDatingAnniversary = () => {
-      setTimeLeftDatingAnniversary(calculateTimeLeft('2026-09-15T00:00:00'));
+      const nextAnniversary = getNextDatingAnniversary();
+      setDatingAnniversary(nextAnniversary);
+      setTimeLeftDatingAnniversary(calculateTimeLeft(nextAnniversary.targetDate));
     };
 
     updateDatingAnniversary();
@@ -659,7 +668,7 @@ Created with ❤️ for Juan & Walewska`;
           {/* Countdown to 1 Year - Apple Style */}
           <div className="text-center mb-4 sm:mb-6 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6 px-2 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Countdown to September 15th - Celebrating 13 Months of Dating
+              Countdown to {datingAnniversary.monthName} 15th - Celebrating {datingAnniversary.monthsTogether} Months of Dating
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
               <div className="group relative bg-gradient-to-br from-pink-500/30 to-red-500/30 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-xl border border-pink-400/30 hover:border-pink-400/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/30">
