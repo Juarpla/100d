@@ -22,7 +22,9 @@ const images = [
   "/love/WhatsApp Image 2026-06-07 at 01.34.26.jpeg",
   "/love/WhatsApp Image 2026-06-16 at 01.12.09.jpeg",
   "/love/WhatsApp Image 2026-06-29 at 02.22.20.jpeg",
-  "/love/WhatsApp Image 2026-07-10 at 18.34.27.jpeg"
+  "/love/WhatsApp Image 2026-07-10 at 18.34.27.jpeg",
+  "/love/memory-2026-09-21-1.jpg",
+  "/love/memory-2026-09-21-2.jpg"
 ];
 
 export default function Home() {
