@@ -1,6 +1,6 @@
 {
   "name": "100d Next.js app",
-  "install": "NODE_BIN=\"$HOME/.nvm/versions/node/v$(cat .nvmrc)/bin\" && export PATH=\"$NODE_BIN:$PATH\" && \"$NODE_BIN/node\" --version && \"$NODE_BIN/npm\" ci",
+  "install": "bash .cursor/setup-node.sh",
   "terminals": [
     {
       "name": "next-dev",
