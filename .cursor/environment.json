@@ -1,10 +1,10 @@
 {
   "name": "100d Next.js app",
-  "install": "npm ci",
+  "install": "NODE_BIN=\"$HOME/.nvm/versions/node/v$(cat .nvmrc)/bin\" && export PATH=\"$NODE_BIN:$PATH\" && \"$NODE_BIN/node\" --version && \"$NODE_BIN/npm\" ci",
   "terminals": [
     {
       "name": "next-dev",
-      "command": "npm run dev"
+      "command": "NODE_BIN=\"$HOME/.nvm/versions/node/v$(cat .nvmrc)/bin\" && export PATH=\"$NODE_BIN:$PATH\" && \"$NODE_BIN/npm\" run dev"
     }
   ],
   "ports": [
